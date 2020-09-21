@@ -11,6 +11,10 @@ Blazor WebAssembly を使った便利コンポーネントおよび業務アプ�
 |[YaminabeBlazor.Web](https://github.com/kzlabo/YaminabeBlazor/)|[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/kzlabo/YaminabeBlazor/blob/master/LICENSE)||サンプル|
 |[YaminabeBlazor.Web.Client.Stub](https://github.com/kzlabo/YaminabeBlazor/)|[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/kzlabo/YaminabeBlazor/blob/master/LICENSE)||サンプルをクライアントのみで動作させる為のスタブ|
 
+## DEMO
+
+デモページは[こちら](https://kind-river-07c33d900.azurestaticapps.net/)をクリック。
+
 ## javascript を一切使わずに C# と CSS のみでここまでできる
 
 ![デモ1](images/demo1.gif "demo1")
