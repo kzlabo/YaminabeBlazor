@@ -1,0 +1,53 @@
+﻿@*
+    * Copyright 2020 kzlabo
+    *
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *
+    *     http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+*@
+@inherits LayoutComponentBase
+
+<nav class="navbar">
+    <div class="navbar-sidemenu">
+        <div @onclick="OnSideMenuClick" class="humberger">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <div class="navbar-account">
+        <input @bind="LoginInput.UserId" type="text" placeholder="@WordResource.LoginId" style="width:6rem;" />
+        <input @bind="LoginInput.Password" type="password" placeholder="@WordResource.Password" style="width:6rem;" />
+        <button @onclick="OnLoginClick" type="button" style="width:6rem;">
+            @WordResource.Login
+        </button>
+    </div>
+</nav>
+<AuthorizeView>
+    <Authorized>
+        <div class="sidebar @SidebarCloseClassName">
+            <div class="sidebar-content">
+                <NavMenu OnMenuClickCallback="OnMenuClick" />
+            </div>
+        </div>
+        <div class="main @MainFullClassName">
+            <div class="main-container">
+                @Body
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <h4>以下のアカウントでログインができます。</h4>
+        <p>・ログインID ： kz</p>
+        <p>・パスワード ： labo</p>
+    </NotAuthorized>
+</AuthorizeView>
+<NotificationBarComponent />

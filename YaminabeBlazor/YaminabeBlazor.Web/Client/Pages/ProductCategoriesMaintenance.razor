@@ -1,0 +1,140 @@
+﻿@*
+    * Copyright 2020 kzlabo
+    *
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *
+    *     http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+*@
+@page "/ProductCategoriesMaintenance"
+@inherits MyPageBase
+@*
+    --------------------------------------------------
+    main content
+    --------------------------------------------------
+*@
+<div class="main-content @MainFullClassName">
+    @*
+        --------------------------------------------------
+        title area
+        --------------------------------------------------
+    *@
+    <h1>@($"{WordResource.Category_Master} {WordResource.Maintenance}")</h1>
+
+    @*
+        --------------------------------------------------
+        command area
+        --------------------------------------------------
+    *@
+    <div>
+        <p>
+            <button @onclick="OnSearchClick" type="button">@WordResource.Search</button>
+            <button @onclick="OnPutClick" type="button">@WordResource.Commit</button>
+            <button @onclick="OnHelpClick" type="button">@WordResource.Help</button>
+        </p>
+    </div>
+
+    @*
+        --------------------------------------------------
+        grid command area
+        --------------------------------------------------
+    *@
+    <div>
+        <EditableItemAddButtonComponent TItem="ProductCategoryInputModel" Items="ProductCategories">@WordResource.Add</EditableItemAddButtonComponent>
+        <button @onclick="OnSortClick" type="button">@WordResource.Sort</button>
+    </div>
+    @*
+        --------------------------------------------------
+        grid item area
+        --------------------------------------------------
+    *@
+    <EditableGridComponent TItem="ProductCategoryInputModel"
+                           Items="@ProductCategories"
+                           EditRowClass="is-selected"
+                           DeletedRowClass="is-deleted"
+                           class="table is-bordered is-slim is-color-patterned"
+                           style="width:100%; min-width:670px; table-layout:fixed; word-break: break-all;">
+        <TableColgroup>
+            <col style="width:60px;" />
+            <col style="width:60px;" />
+            <col style="width:150px;" />
+            <col style="width:calc(100% - 270px); min-width: 400px;" />
+        </TableColgroup>
+        <TableHeader>
+            <EditableGridDataRow>
+                <th></th>
+                <th></th>
+                <th class="middle center">@($"{WordResource.Category}{WordResource.Code}")</th>
+                <th class="middle center">@($"{WordResource.Category}{WordResource.Name}")</th>
+            </EditableGridDataRow>
+            <EditableGridDataRow>
+                <th></th>
+                <th></th>
+                <th><FilterConditionComponent PropertyName="@nameof(ProductCategoryInputModel.CategoryId)" /></th>
+                <th><FilterConditionComponent PropertyName="@nameof(ProductCategoryInputModel.CategoryName)" /></th>
+            </EditableGridDataRow>
+        </TableHeader>
+        <RowTemplate Context="productCategory">
+            <EditableGridDataRow @key="productCategory.UniqueId">
+                @* ItemCommand *@
+                <td class="middle center">
+                    <EditableItemEditButtonComponent Item="@productCategory" class="button is-small" />
+                </td>
+                <td class="middle center">
+                    <EditableItemDeleteButtonComponent Item="@productCategory" class="button is-small" />
+                </td>
+                @* CategoryId *@
+                <td class="middle">
+                    <EditableTextLabelColumnComponent Item="@productCategory" PropertyName="@nameof(productCategory.CategoryId)" />
+                </td>
+                @* CategoryName *@
+                <td class="middle">
+                    <EditableTextLabelColumnComponent Item="@productCategory" PropertyName="@nameof(productCategory.CategoryName)" />
+                </td>
+            </EditableGridDataRow>
+        </RowTemplate>
+        <EditTemplate Context="productCategory">
+            <EditableGridDataRow @key="productCategory.UniqueId">
+                @* ItemCommand *@
+                <td class="middle center">
+                    <EditableItemEditButtonComponent Item="@productCategory" />
+                </td>
+                <td class="middle center">
+                    <EditableItemDeleteButtonComponent Item="@productCategory" />
+                </td>
+                @* CategoryId *@
+                <td class="middle">
+                    <EditableTextControlComponent @bind-Value="productCategory.CategoryId" EditableState="EditStateOptions.Added" />
+                </td>
+                @* CategoryName *@
+                <td class="middle">
+                    <EditableTextControlComponent @bind-Value="productCategory.CategoryName" />
+                </td>
+            </EditableGridDataRow>
+        </EditTemplate>
+    </EditableGridComponent>
+</div>
+
+@*
+    --------------------------------------------------
+    option content
+    --------------------------------------------------
+*@
+<LayerManagerComponent @ref="LayerManager" class="optionbar">
+    @* SortOption *@
+    <SortOptionBarComponent TItem="ProductCategoryInputModel" Items="@ProductCategories" Name="SortOption" class="optionbar-content">
+        <SortConditionComponent PropertyName="@nameof(ProductCategoryInputModel.CategoryId)" DisplayName="@($"{WordResource.Category}{WordResource.Code}")" />
+        <SortConditionComponent PropertyName="@nameof(ProductCategoryInputModel.CategoryName)" DisplayName="@($"{WordResource.Category}{WordResource.Name}")" />
+    </SortOptionBarComponent>
+    @* Help *@
+    <TemplateLayerComponent Name="HelpOption" class="optionbar-content">
+        マスタメンテナンス画面のサンプル。
+    </TemplateLayerComponent>
+</LayerManagerComponent>

@@ -1,0 +1,661 @@
+﻿/*
+ * Copyright 2020 kzlabo
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+$navbar-height: 3.25rem;
+$sidebar-width: 300px;
+$sidebar-closed-width: 1px;
+$optionbar-width: 400px;
+$slim-padding-height: 0.25em;
+
+$navbar-bgcolor: #000000;
+$sidebar-background: #333333;
+$optionbar-background: #cccccc;
+
+$color-patterned-border: #cccccc;
+$color-patterned-head: #1b5a3b;
+$color-patterned-head-text: #ffffff;
+$color-patterned-even: #ffffff;
+$color-patterned-odd: #efefef;
+$color-patterned-selected: #f7f470;
+
+html {
+    overflow: hidden;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    background-color: #d1d1c3;
+    overflow: hidden;
+    
+}
+
+h1,h2,h3,h4,h5,h6 {
+    margin: 0 0 0 0;
+}
+
+p {
+    margin: 0 0 0 0;
+}
+
+.navbar {
+    display: flex;
+    background-color: $navbar-bgcolor;
+    height: $navbar-height;
+    border-bottom: 1px solid #300053;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+
+    .humberger {
+        display: inline-block;
+        position: relative;
+        height: 36px;
+        width: 36px;
+        box-sizing: border-box;
+
+        div {
+            display: inline-block;
+            position: absolute;
+            left: 2px;
+            height: 4px;
+            width: 30px;
+            border-radius: 2px;
+            background-color: #ffffff;
+            box-sizing: border-box;
+        }
+
+        div:nth-of-type(1) {
+            top: 7px;
+        }
+
+        div:nth-of-type(2) {
+            top: 16px;
+        }
+
+        div:nth-of-type(3) {
+            bottom: 7px;
+        }
+    }
+
+    .humberger:active {
+        background-color: #666666;
+    }
+
+    .humberger:hover {
+        cursor: pointer;
+    }
+}
+
+.navbar-sidemenu {
+    display: flex;
+    flex-basis: $sidebar-width;
+    align-items: center;
+}
+
+.navbar-account {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.sidebar {
+    position: absolute;
+    top: $navbar-height;
+    left: 0;
+    width: $sidebar-width;
+    height: calc(100% - #{$navbar-height});
+    box-sizing: border-box;
+    padding: 0 0 0 0;
+    background: $sidebar-background;
+    box-shadow: 5px 0px 7px 0px rgba(0,0,0,0.5);
+    overflow-y: auto;
+
+    .sidebar-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        padding: 0.75rem 0.75rem 0.75rem 0.75rem;
+        margin: 0 0 0 0;
+    }
+
+    .button {
+        background: none;
+        border: none;
+        color: #ffffff;
+    }
+
+    .menu-list {
+        list-style: none;
+        padding: 0 0 0 0;
+
+        ul {
+            list-style: none;
+            padding: 0 0 0 0;
+            padding-left: 1.0rem;
+        }
+    }
+
+    .menu-text {
+        color: #97ff00;
+    }
+
+    .menu-label {
+        color: #ffffff;
+    }
+
+    .menu-list {
+        a {
+            color: #ffffff;
+        }
+    }
+    // 非展開時設定
+    &.close {
+        width: $sidebar-closed-width;
+        // 非展開状態では領域を超えた場合は表示しない
+        .sidebar-content {
+            overflow: hidden;
+        }
+        // 非展開状態でもホバー状態では該当のメニューリストを表示するために領域を超えた分も表示させる
+        .sidebar-content:hover {
+            overflow: visible;
+        }
+        // 表示は消しているがCSSのスタイルでchild指定されているものは有効になってしまうので
+        // .button .icon:last-child:not(:first-child) の設定を .button .icon:first-child:last-child に調整
+        .menu-head {
+            .button .icon {
+                margin-left: calc(-.5em - 1px);
+                margin-right: calc(-.5em - 1px);
+            }
+
+            .menu-text {
+                display: none;
+            }
+        }
+
+        .menu-item {
+            display: none;
+        }
+        // ホバー状態では該当のメニューリスト配下の要素を表示
+        .menu-list:hover {
+            width: $sidebar-width;
+            background: $sidebar-background;
+            border-radius: 5px;
+            box-shadow: 2px 2px 2px 2px rgba(0,0,0,0.4);
+
+            .menu-item {
+                display: block;
+                width: 100%;
+            }
+        }
+    }
+}
+
+.main {
+    position: absolute;
+    top: $navbar-height;
+    left: $sidebar-width;
+    width: calc(100% - #{$sidebar-width});
+    height: calc(100% - #{$navbar-height});
+    box-sizing: border-box;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+
+    .main-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        padding: 0 0 0 0;
+        margin: 0 0 0 0;
+        overflow: hidden;
+    }
+
+    .main-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: calc(100% - #{$optionbar-width});
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        padding: 0.75rem 0.75rem 0.75rem 0.75rem;
+        margin: 0 0 0 0;
+        overflow: auto;
+
+        &.full {
+            width: 100%;
+        }
+    }
+
+    .optionbar {
+        position: absolute;
+        top: 0;
+        left: calc(100% - #{$optionbar-width});
+        width: $optionbar-width;
+        height: 100%;
+        box-sizing: border-box;
+        padding: 0 0 0 0;
+        margin: 0 0 0 0;
+        border-left: 1px solid #300053;
+        overflow-y: scroll;
+        box-shadow: 0px 0px 50px 5px rgba(0,0,0,0.4);
+
+        .optionbar-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 0 0 0 0;
+            padding: 0.75rem 0.75rem 0.75rem 0.75rem;
+            margin: 0 0 0 0;
+            background: $optionbar-background;
+
+            &.none {
+                display: none;
+            }
+        }
+
+        &.close {
+            margin-left: $optionbar-width;
+            box-shadow: 0px 0px 0px 0px rgba(0,0,0,0.0);
+        }
+    }
+
+    &.full {
+        left: $sidebar-closed-width;
+        width: calc(100% - #{$sidebar-closed-width});
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+
+        &.close {
+            width: 0;
+
+            .menu {
+                display: none;
+            }
+        }
+    }
+
+    .notificationbar {
+        left: 0;
+        width: 100%;
+
+
+        &.close {
+            margin-left: 100%;
+        }
+    }
+
+    .main {
+        left: 0;
+        width: 100%;
+
+        .main-content {
+            width: 100%;
+        }
+
+        .optionbar {
+            left: 0;
+            width: 100%;
+
+            &.close {
+                margin-left: 100%;
+            }
+        }
+
+        &.full {
+            left: 0;
+            width: 100%;
+        }
+    }
+}
+
+/*
+    z-index
+*/
+.sidebar {
+    z-index: 10;
+}
+
+.main {
+    z-index: 5;
+
+    .main-content {
+        z-index: 5;
+    }
+
+    .optionbar {
+        z-index: 10;
+    }
+}
+
+/*
+    animation
+*/
+
+.sidebar {
+    transition: 0.2s;
+
+    &.close {
+        transition: 0.5s;
+    }
+}
+
+.main {
+    transition: 0.2s;
+
+    &.full {
+        transition: 0.5s;
+    }
+
+    .optionbar {
+        transition: 0.2s;
+
+        &.close {
+            transition: 0.5s;
+        }
+    }
+}
+
+/*
+    ui
+*/
+.table {
+    border-collapse: collapse;
+
+    td, th {
+        &.middle {
+            vertical-align: middle;
+        }
+
+        &.top {
+            vertical-align: top;
+        }
+
+        &.bottom {
+            vertical-align: bottom;
+        }
+
+        &.center {
+            text-align: center;
+        }
+
+        &.left {
+            text-align: left;
+        }
+
+        &.right {
+            text-align: right;
+        }
+
+        input[type=text],
+        input[type=number],
+        input[type=password],
+        input[type=date],
+        textarea {
+            width: calc(100% - 4px);
+            box-sizing: border-box;
+        }
+    }
+
+    &.is-bordered {
+        td, th {
+            border: 1px solid $color-patterned-border;
+        }
+    }
+}
+
+.table {
+    &.is-slim {
+        td, th {
+            padding-top: $slim-padding-height;
+            padding-bottom: $slim-padding-height;
+        }
+    }
+}
+
+.table {
+    &.is-color-patterned {
+        th {
+            background-color: $color-patterned-head;
+            color: $color-patterned-head-text;
+        }
+
+        tr {
+            &.is-selected {
+                background-color: $color-patterned-selected;
+            }
+        }
+
+        tr:not(.is-selected):nth-child(2n) {
+            td {
+                background-color: $color-patterned-even;
+            }
+        }
+
+        tr:not(.is-selected):nth-child(2n+1) {
+            td {
+                background-color: $color-patterned-odd;
+            }
+        }
+    }
+}
+
+.list-table {
+    .row {
+        display: flex;
+    }
+}
+
+.list-table {
+    &.is-slim {
+        .column {
+            padding-top: $slim-padding-height;
+            padding-bottom: $slim-padding-height;
+        }
+    }
+
+    input[type=text],
+    input[type=number],
+    input[type=password],
+    input[type=date],
+    textarea {
+        width: calc(100% - 4px);
+        box-sizing: border-box;
+    }
+}
+
+.list-table {
+    &.is-color-patterned {
+        .is-head {
+            background-color: $color-patterned-head;
+            color: $color-patterned-head-text;
+        }
+
+        .is-selected {
+            background-color: $color-patterned-selected;
+        }
+
+        .row:not(.is-head):not(.is-selected):nth-child(2n) {
+            background-color: $color-patterned-even;
+        }
+
+        .row:not(.is-head):not(.is-selected):nth-child(2n+1) {
+            background-color: $color-patterned-odd;
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .list-table {
+        .row {
+            display: block;
+        }
+    }
+
+    .list-table {
+        .row {
+            border-top: 1px solid #999999;
+        }
+    }
+
+}
+
+.input {
+    &.center {
+        text-align: center;
+    }
+    &.left {
+        text-align: left;
+    }
+    &.right{
+        text-align: right;
+    }
+}
+
+/*
+    blazor template style
+*/
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui {
+    .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
+}
+
+/*
+    loading
+*/
+.loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.sk-cube-grid {
+    width: 40px;
+    height: 40px;
+    margin: 100px auto;
+}
+
+.sk-cube-grid .sk-cube {
+    width: 33%;
+    height: 33%;
+    background-color: #333;
+    float: left;
+    -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
+    animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
+}
+
+.sk-cube-grid .sk-cube1 {
+    -webkit-animation-delay: 0.2s;
+    animation-delay: 0.2s;
+}
+
+.sk-cube-grid .sk-cube2 {
+    -webkit-animation-delay: 0.3s;
+    animation-delay: 0.3s;
+}
+
+.sk-cube-grid .sk-cube3 {
+    -webkit-animation-delay: 0.4s;
+    animation-delay: 0.4s;
+}
+
+.sk-cube-grid .sk-cube4 {
+    -webkit-animation-delay: 0.1s;
+    animation-delay: 0.1s;
+}
+
+.sk-cube-grid .sk-cube5 {
+    -webkit-animation-delay: 0.2s;
+    animation-delay: 0.2s;
+}
+
+.sk-cube-grid .sk-cube6 {
+    -webkit-animation-delay: 0.3s;
+    animation-delay: 0.3s;
+}
+
+.sk-cube-grid .sk-cube7 {
+    -webkit-animation-delay: 0s;
+    animation-delay: 0s;
+}
+
+.sk-cube-grid .sk-cube8 {
+    -webkit-animation-delay: 0.1s;
+    animation-delay: 0.1s;
+}
+
+.sk-cube-grid .sk-cube9 {
+    -webkit-animation-delay: 0.2s;
+    animation-delay: 0.2s;
+}
+
+@-webkit-keyframes sk-cubeGridScaleDelay {
+    0%, 70%, 100% {
+        -webkit-transform: scale3D(1, 1, 1);
+        transform: scale3D(1, 1, 1);
+    }
+
+    35% {
+        -webkit-transform: scale3D(0, 0, 1);
+        transform: scale3D(0, 0, 1);
+    }
+}
+
+@keyframes sk-cubeGridScaleDelay {
+    0%, 70%, 100% {
+        -webkit-transform: scale3D(1, 1, 1);
+        transform: scale3D(1, 1, 1);
+    }
+
+    35% {
+        -webkit-transform: scale3D(0, 0, 1);
+        transform: scale3D(0, 0, 1);
+    }
+}

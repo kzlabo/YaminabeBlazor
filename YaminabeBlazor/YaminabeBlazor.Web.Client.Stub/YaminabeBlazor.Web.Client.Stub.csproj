@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Version>0.0.1-alpha</Version>
+    <Authors>kzlabo.dev</Authors>
+    <Copyright>Copyright 2020 kzlabo.dev</Copyright>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/kzlabo/YaminabeBlazor</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/kzlabo/YaminabeBlazor</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\YaminabeBlazor.Component\YaminabeBlazor.Component.csproj" />
+    <ProjectReference Include="..\YaminabeBlazor.Web\Shared\YaminabeBlazor.Web.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

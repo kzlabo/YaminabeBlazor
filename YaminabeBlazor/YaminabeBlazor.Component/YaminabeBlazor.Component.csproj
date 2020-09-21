@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RazorLangVersion>3.0</RazorLangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Version>0.0.1-alpha.2</Version>
+    <Authors>kzlabo.dev</Authors>
+    <Company>kzlabo.dev</Company>
+    <Copyright>Copyright 2020 kzlabo.dev</Copyright>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/kzlabo/YaminabeBlazor</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/kzlabo/YaminabeBlazor</RepositoryUrl>
+    <PackageTags>blazor component</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="compilerconfig.json" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.8" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\YaminabeBlazor.Component.Core\YaminabeBlazor.Component.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Version>0.0.1-alpha</Version>
+    <Authors>kzlabo.dev</Authors>
+    <Company>kzlabo.dev</Company>
+    <Copyright>Copyright 2020 kzlabo.dev</Copyright>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/kzlabo/YaminabeBlazor</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/kzlabo/YaminabeBlazor</RepositoryUrl>
+  </PropertyGroup>
+
+</Project>

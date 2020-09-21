@@ -1,0 +1,311 @@
+﻿@*
+    * Copyright 2020 kzlabo
+    *
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *
+    *     http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+*@
+@page "/CustomersMaintenance"
+@inherits MyPageBase
+@*
+    --------------------------------------------------
+    main content
+    --------------------------------------------------
+*@
+<div class="main-content @MainFullClassName">
+    @*
+        --------------------------------------------------
+        title area
+        --------------------------------------------------
+    *@
+    <h1>@($"{WordResource.Customer_Master} {WordResource.Maintenance}")</h1>
+
+    @*
+        --------------------------------------------------
+        command area
+        --------------------------------------------------
+    *@
+    <div>
+        <p>
+            <button @onclick="OnSearchClick" type="button">@WordResource.Search</button>
+            <button @onclick="OnPutClick" type="button">@WordResource.Commit</button>
+            <button @onclick="OnHelpClick" type="button">@WordResource.Help</button>
+        </p>
+    </div>
+
+    @*
+        --------------------------------------------------
+        grid command area
+        --------------------------------------------------
+    *@
+    <div>
+        <EditableItemAddButtonComponent TItem="CustomerInputModel" Items="Customers">@WordResource.Add</EditableItemAddButtonComponent>
+        <button @onclick="OnSortClick" type="button">@WordResource.Sort</button>
+    </div>
+    @*
+        --------------------------------------------------
+        grid item area
+        --------------------------------------------------
+    *@
+    <EditableGridComponent TItem="CustomerInputModel"
+                           Items="@Customers"
+                           EditRowClass="is-selected"
+                           DeletedRowClass="is-deleted"
+                           class="table is-bordered is-slim is-color-patterned"
+                           style="width:100%; min-width:1300px; table-layout:fixed; word-break: break-all;">
+        <TableColgroup>
+            <col style="width:60px;" />
+            <col style="width:60px;" />
+            <col style="width:150px;" />
+            <col style="width:200px;" />
+            <col style="width:120px;" />
+            <col style="width:80px;" />
+            <col style="width:80px;" />
+            <col style="width:80px;" />
+            <col style="width:80px;" />
+            <col style="width:80px;" />
+            <col style="width:calc(100% - 990px); min-width:300px;" />
+        </TableColgroup>
+        <TableHeader>
+            <EditableGridDataRow>
+                <th rowspan="2"></th>
+                <th rowspan="2"></th>
+                <th rowspan="2" class="middle center">@($"{WordResource.Customer}{WordResource.Code}")</th>
+                <th rowspan="2" class="middle center">@($"{WordResource.Customer}{WordResource.Name}")</th>
+                <th rowspan="2" class="middle center">@($"{WordResource.EstablishmentDate}")</th>
+                <th rowspan="2" class="middle center">@($"{WordResource.CutoffDate}")</th>
+                <th rowspan="2" class="middle center">@($"{WordResource.CollectionDate}")</th>
+                <th colspan="3" class="middle center">@($"{WordResource.Tax}")</th>
+                <th rowspan="2" class="middle center">@($"{WordResource.Note}")</th>
+            </EditableGridDataRow>
+            <EditableGridDataRow>
+                <th class="middle center">@($"{WordResource.Type}")</th>
+                <th class="middle center">@($"{WordResource.Calc}")</th>
+                <th class="middle center">@($"{WordResource.Round}")</th>
+            </EditableGridDataRow>
+            <EditableGridDataRow>
+                <th></th>
+                <th></th>
+                <th><FilterConditionComponent PropertyName="@nameof(CustomerInputModel.CustomerId)" /></th>
+                <th><FilterConditionComponent PropertyName="@nameof(CustomerInputModel.CustomerName)" /></th>
+                <th><FilterConditionComponent PropertyName="@nameof(CustomerInputModel.EstablishmentDate)" /></th>
+                <th><FilterConditionComponent PropertyName="@nameof(CustomerInputModel.CutoffDateTypeName)" /></th>
+                <th><FilterConditionComponent PropertyName="@nameof(CustomerInputModel.CollectionDateTypeName)" /></th>
+                <th><FilterConditionComponent PropertyName="@nameof(CustomerInputModel.TaxTypeName)" /></th>
+                <th><FilterConditionComponent PropertyName="@nameof(CustomerInputModel.TaxCalcTypeName)" /></th>
+                <th><FilterConditionComponent PropertyName="@nameof(CustomerInputModel.TaxRoundTypeName)" /></th>
+                <th><FilterConditionComponent PropertyName="@nameof(CustomerInputModel.Note)" /></th>
+            </EditableGridDataRow>
+        </TableHeader>
+        <RowTemplate Context="customer">
+            <EditableGridDataRow @key="customer.UniqueId">
+                @* ItemCommand *@
+                <td class="middle center">
+                    <EditableItemEditButtonComponent Item="@customer" class="button is-small" />
+                </td>
+                <td class="middle center">
+                    <EditableItemDeleteButtonComponent Item="@customer" class="button is-small" />
+                </td>
+                @* CustomerId *@
+                <td class="middle">
+                    <EditableTextLabelColumnComponent Item="@customer" PropertyName="@nameof(customer.CustomerId)" />
+                </td>
+                @* CustomerName *@
+                <td class="middle">
+                    <EditableTextLabelColumnComponent Item="@customer" PropertyName="@nameof(customer.CustomerName)" />
+                </td>
+                @* EstablishmentDate *@
+                <td class="middle center">
+                    <EditableTextLabelColumnComponent Item="@customer" PropertyName="@nameof(customer.EstablishmentDate)" Format="yyyy/MM/dd" />
+                </td>
+                @* CutoffDate *@
+                <td class="middle center">
+                    <EditableTextLabelColumnComponent Item="@customer" PropertyName="@nameof(customer.CutoffDateTypeName)" />
+                </td>
+                @* CollectionDate *@
+                <td class="middle center">
+                    <EditableTextLabelColumnComponent Item="@customer" PropertyName="@nameof(customer.CollectionDateTypeName)" />
+                </td>
+                @* Tax *@
+                <td class="middle center">
+                    <EditableTextLabelColumnComponent Item="@customer" PropertyName="@nameof(customer.TaxTypeName)" />
+                </td>
+                @* TaxCalc *@
+                <td class="middle center">
+                    <EditableTextLabelColumnComponent Item="@customer" PropertyName="@nameof(customer.TaxCalcTypeName)" />
+                </td>
+                @* TaxRound *@
+                <td class="middle center">
+                    <EditableTextLabelColumnComponent Item="@customer" PropertyName="@nameof(customer.TaxRoundTypeName)" />
+                </td>
+                @* Note *@
+                <td class="middle center">
+                    <EditableTextLabelColumnComponent Item="@customer" PropertyName="@nameof(customer.Note)" />
+                </td>
+            </EditableGridDataRow>
+        </RowTemplate>
+        <EditTemplate Context="customer">
+            <EditableGridDataRow @key="customer.UniqueId">
+                <td colspan="11">
+                    <div style="padding:0.75rem;">
+                        <EditForm Model="@customer">
+                            <DataAnnotationsValidator />
+                            <div style="display:flex;">
+                                <EditableItemEditButtonComponent Item="@customer" />
+                                <EditableItemDeleteButtonComponent Item="@customer" />
+                            </div>
+                            <div style="display:flex;">
+                                <div style="display:flex; flex-direction:column; flex-basis:50%;">
+                                    @* CustomerId *@
+                                    <FormFieldComponent Title="@WordResource.CustomerId" ValidationMessageExpression="(() => customer.CustomerId)">
+                                        <EditableInputTextComponent @bind-Value="customer.CustomerId" EditableState="EditStateOptions.Added" />
+                                    </FormFieldComponent>
+                                    @* CustomerName *@
+                                    <FormFieldComponent Title="@WordResource.CustomerName" ValidationMessageExpression="(() => customer.CustomerName)">
+                                        <EditableInputTextComponent @bind-Value="customer.CustomerName" />
+                                    </FormFieldComponent>
+                                    <FormFieldComponent Title="@WordResource.CustomerKanaName" ValidationMessageExpression="(() => customer.CustomerKanaName)">
+                                        <EditableInputTextComponent @bind-Value="customer.CustomerKanaName" />
+                                    </FormFieldComponent>
+                                    @* CustomerShortName *@
+                                    <FormFieldComponent Title="@WordResource.CustomerShortName" ValidationMessageExpression="(() => customer.CustomerShortName)">
+                                        <EditableInputTextComponent @bind-Value="customer.CustomerShortName" />
+                                    </FormFieldComponent>
+                                    @* EstablishmentDate *@
+                                    <FormFieldComponent Title="@WordResource.EstablishmentDate" ValidationMessageExpression="(() => customer.EstablishmentDate)">
+                                        <EditableInputDateComponent @bind-Value="customer.EstablishmentDate" />
+                                    </FormFieldComponent>
+                                    @* Ceo *@
+                                    <FormFieldComponent Title="@WordResource.Ceo" ValidationMessageExpression="(() => customer.Ceo)">
+                                        <EditableInputTextComponent @bind-Value="customer.Ceo" />
+                                    </FormFieldComponent>
+                                    @* PostalCode *@
+                                    <FormFieldComponent Title="@WordResource.PostalCode" ValidationMessageExpression="(() => customer.PostalCode)">
+                                        <EditableInputTextComponent @bind-Value="customer.PostalCode" />
+                                    </FormFieldComponent>
+                                    @* Address *@
+                                    <FormFieldComponent Title="@WordResource.Address" ValidationMessageExpression="(() => customer.Address)">
+                                        <EditableInputTextComponent @bind-Value="customer.Address" />
+                                    </FormFieldComponent>
+                                    @* Tel *@
+                                    <FormFieldComponent Title="@WordResource.Tel" ValidationMessageExpression="(() => customer.Tel)">
+                                        <EditableInputTextComponent @bind-Value="customer.Tel" />
+                                    </FormFieldComponent>
+                                    @* Fax *@
+                                    <FormFieldComponent Title="@WordResource.Fax" ValidationMessageExpression="(() => customer.Fax)">
+                                        <EditableInputTextComponent @bind-Value="customer.Fax" />
+                                    </FormFieldComponent>
+                                    @* Mail *@
+                                    <FormFieldComponent Title="@WordResource.Mail" ValidationMessageExpression="(() => customer.Mail)">
+                                        <EditableInputTextComponent @bind-Value="customer.Mail" />
+                                    </FormFieldComponent>
+                                    @* HomePage *@
+                                    <FormFieldComponent Title="@WordResource.HomePage" ValidationMessageExpression="(() => customer.Hp)">
+                                        <EditableInputTextComponent @bind-Value="customer.Hp" />
+                                    </FormFieldComponent>
+                                </div>
+                                <div style="display:flex; flex-direction:column; flex-basis:50%;">
+                                    @* CutoffDateType *@
+                                    <FormFieldComponent Title="@WordResource.CutoffDateType" ValidationMessageExpression="(() => customer.CutoffDateType)">
+                                        <EditableInputSelectComponent TValue="CutoffDateTypeOptions"
+                                                                      TDropModel="CutoffDateTypeListItem"
+                                                                      DropItems="CutoffDateTypeList"
+                                                                      SelectedCallBack="customer.SetCutoffDateType"
+                                                                      @bind-Value="customer.CutoffDateType" />
+                                    </FormFieldComponent>
+                                    @* CutoffDate *@
+                                    <FormFieldComponent Title="@WordResource.CutoffDate" ValidationMessageExpression="(() => customer.CutoffDate)">
+                                        <EditableInputNumberComponent @bind-Value="customer.CutoffDate" />
+                                    </FormFieldComponent>
+                                    @* CollectionDateType *@
+                                    <FormFieldComponent Title="@WordResource.CollectionDateType" ValidationMessageExpression="(() => customer.CollectionDateType)">
+                                        <EditableInputSelectComponent TValue="CollectionDateTypeOptions"
+                                                                      TDropModel="CollectionDateTypeListItem"
+                                                                      DropItems="CollectionDateTypeList"
+                                                                      SelectedCallBack="customer.SetCollectionDateType"
+                                                                      @bind-Value="customer.CollectionDateType" />
+                                    </FormFieldComponent>
+                                    @* CollectionDate *@
+                                    <FormFieldComponent Title="@WordResource.CollectionDate" ValidationMessageExpression="(() => customer.CollectionDate)">
+                                        <EditableInputNumberComponent @bind-Value="customer.CollectionDate" />
+                                    </FormFieldComponent>
+                                    @* TaxType *@
+                                    <FormFieldComponent Title="@WordResource.TaxType" ValidationMessageExpression="(() => customer.TaxType)">
+                                        <EditableInputRadioButtonListComponent TValue="TaxTypeOptions"
+                                                                               TRadioModel="TaxTypeListItem"
+                                                                               DropItems="TaxTypeList"
+                                                                               SelectedCallBack="customer.SetTaxType"
+                                                                               @bind-Value="customer.TaxType" />
+                                    </FormFieldComponent>
+                                    @* TaxCalcType *@
+                                    <FormFieldComponent Title="@WordResource.TaxCalcType" ValidationMessageExpression="(() => customer.TaxCalcType)">
+                                        <EditableInputRadioButtonListComponent TValue="TaxCalcTypeOptions"
+                                                                               TRadioModel="TaxCalcTypeListItem"
+                                                                               DropItems="TaxCalcTypeList"
+                                                                               SelectedCallBack="customer.SetTaxCalcType"
+                                                                               @bind-Value="customer.TaxCalcType" />
+                                    </FormFieldComponent>
+                                    @* TaxRoundType *@
+                                    <FormFieldComponent Title="@WordResource.TaxRoundType" ValidationMessageExpression="(() => customer.TaxRoundType)">
+                                        <EditableInputRadioButtonListComponent TValue="TaxRoundTypeOptions"
+                                                                               TRadioModel="TaxRoundTypeListItem"
+                                                                               DropItems="TaxRoundTypeList"
+                                                                               SelectedCallBack="customer.SetTaxRoundType"
+                                                                               @bind-Value="customer.TaxRoundType" />
+                                    </FormFieldComponent>
+                                    @* CustomerId *@
+                                    <FormFieldComponent Title="@WordResource.Note" ValidationMessageExpression="(() => customer.Note)">
+                                        <EditableInputTextAreaComponent @bind-Value="customer.Note" rows="5" />
+                                    </FormFieldComponent>
+                                </div>
+                            </div>
+                        </EditForm>
+                    </div>
+                </td>
+            </EditableGridDataRow>
+        </EditTemplate>
+    </EditableGridComponent>
+</div>
+
+@*
+    --------------------------------------------------
+    option content
+    --------------------------------------------------
+*@
+<LayerManagerComponent @ref="LayerManager" class="optionbar">
+    @* SortOption *@
+    <SortOptionBarComponent TItem="CustomerInputModel" Items="@Customers" Name="SortOption" class="optionbar-content">
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.CustomerId)" DisplayName="@WordResource.CustomerId" />
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.CustomerName)" DisplayName="@WordResource.CustomerName" />
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.CustomerKanaName)" DisplayName="@WordResource.CustomerKanaName" />
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.CustomerShortName)" DisplayName="@WordResource.CustomerShortName" />
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.EstablishmentDate)" DisplayName="@WordResource.EstablishmentDate" />
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.Ceo)" DisplayName="@WordResource.Ceo" />
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.PostalCode)" DisplayName="@WordResource.PostalCode" />
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.Address)" DisplayName="@WordResource.Address" />
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.Tel)" DisplayName="@WordResource.Tel" />
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.Fax)" DisplayName="@WordResource.Fax" />
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.Mail)" DisplayName="@WordResource.Mail" />
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.Hp)" DisplayName="@WordResource.HomePage" />
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.CutoffDateType)" DisplayName="@WordResource.CutoffDateType" />
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.CutoffDate)" DisplayName="@WordResource.CutoffDate" />
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.CollectionDateType)" DisplayName="@WordResource.CollectionDateType" />
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.CollectionDate)" DisplayName="@WordResource.CollectionDate" />
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.TaxType)" DisplayName="@WordResource.TaxType" />
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.TaxCalcType)" DisplayName="@WordResource.TaxCalcType" />
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.TaxRoundType)" DisplayName="@WordResource.TaxRoundType" />
+        <SortConditionComponent PropertyName="@nameof(CustomerInputModel.Note)" DisplayName="@WordResource.Note" />
+    </SortOptionBarComponent>
+    @* Help *@
+    <TemplateLayerComponent Name="HelpOption" class="optionbar-content">
+        マスタメンテナンス画面のサンプル。
+    </TemplateLayerComponent>
+</LayerManagerComponent>

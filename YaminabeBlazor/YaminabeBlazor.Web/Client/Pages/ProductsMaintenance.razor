@@ -1,0 +1,235 @@
+﻿@*
+    * Copyright 2020 kzlabo
+    *
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *
+    *     http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+*@
+@page "/ProductsMaintenance"
+@inherits ProductsMaintenanceBase
+@*
+    --------------------------------------------------
+    main content
+    --------------------------------------------------
+*@
+<div class="main-content @MainFullClassName">
+    @*
+        --------------------------------------------------
+        title area
+        --------------------------------------------------
+    *@
+    <h1>@($"{WordResource.Product_Master} {WordResource.Maintenance}")</h1>
+
+    @*
+        --------------------------------------------------
+        command area
+        --------------------------------------------------
+    *@
+    <div>
+        <p>
+            <button @onclick="OnSearchClick" type="button">@WordResource.Search</button>
+            <button @onclick="OnPutClick" type="button">@WordResource.Commit</button>
+            <button @onclick="OnHelpClick" type="button">@WordResource.Help</button>
+        </p>
+    </div>
+
+    @*
+        --------------------------------------------------
+        grid command area
+        --------------------------------------------------
+    *@
+    <div>
+        <EditableItemAddButtonComponent TItem="ProductInputModel" Items="Products">@WordResource.Add</EditableItemAddButtonComponent>
+        <button @onclick="OnSortClick" type="button">@WordResource.Sort</button>
+    </div>
+    @*
+        --------------------------------------------------
+        grid item area
+        --------------------------------------------------
+    *@
+    <EditablePageNationComponent TItem="ProductInputModel" Items="@Products" PageRowSize="50">
+        @WordResource.PagingText
+    </EditablePageNationComponent>
+    <EditableGridComponent TItem="ProductInputModel"
+                           Items="@Products"
+                           EditRowClass="is-selected"
+                           DeletedRowClass="is-deleted"
+                           class="table is-bordered is-hoverable is-slim is-color-patterned"
+                           style="width:100%; min-width:1000px; table-layout:fixed; word-break: break-all;">
+        <TableColgroup>
+            <col style="width:60px;" />
+            <col style="width:60px;" />
+            <col style="width:150px;" />
+            <col style="width:calc(100% - 870px); min-width:200px;" />
+            <col style="width:180px;" />
+            <col style="width:180px;" />
+            <col style="width:120px;" />
+            <col style="width:120px;" />
+        </TableColgroup>
+        <TableHeader>
+            <EditableGridDataRow>
+                <th></th>
+                <th></th>
+                <th class="middle center">@($"{WordResource.Product}{WordResource.Code}")</th>
+                <th class="middle center">@($"{WordResource.Product}{WordResource.Name}")</th>
+                <th class="middle center">@($"{WordResource.Brand}{WordResource.Code}")</th>
+                <th class="middle center">@($"{WordResource.Category}{WordResource.Code}")</th>
+                <th class="middle center">@($"{WordResource.ListPrice}")</th>
+                <th class="middle center">@($"{WordResource.ProductTag}")</th>
+            </EditableGridDataRow>
+            <EditableGridDataRow>
+                <th></th>
+                <th></th>
+                <th><FilterConditionComponent PropertyName="@nameof(ProductInputModel.ProductId)" /></th>
+                <th><FilterConditionComponent PropertyName="@nameof(ProductInputModel.ProductName)" /></th>
+                <th><FilterConditionComponent PropertyName="@nameof(ProductInputModel.BrandName)" /></th>
+                <th><FilterConditionComponent PropertyName="@nameof(ProductInputModel.CategoryName)" /></th>
+                <th><FilterConditionComponent PropertyName="@nameof(ProductInputModel.ListPrice)" /></th>
+                <th><FilterConditionComponent PropertyName="@nameof(ProductInputModel.ProductTagTypeName)" /></th>
+            </EditableGridDataRow>
+        </TableHeader>
+        <RowTemplate Context="product">
+            <EditableGridDataRow @key="product.UniqueId">
+                @* ItemCommand *@
+                <td class="middle center">
+                    <EditableItemEditButtonComponent Item="@product" class="button is-small" />
+                </td>
+                <td class="middle center">
+                    <EditableItemDeleteButtonComponent Item="@product" class="button is-small" />
+                </td>
+                @* ProductCode *@
+                <td class="middle">
+                    <EditableTextLabelColumnComponent Item="@product" PropertyName="@nameof(product.ProductId)" />
+                </td>
+                @* ProductName *@
+                <td class="middle">
+                    <EditableTextLabelColumnComponent Item="@product" PropertyName="@nameof(product.ProductName)" />
+                </td>
+                @* BrandCode *@
+                <td class="middle">
+                    <EditableTextLabelColumnComponent Item="@product" PropertyName="@nameof(product.BrandName)" />
+                </td>
+                @* CategoryCode *@
+                <td class="middle">
+                    <EditableTextLabelColumnComponent Item="@product" PropertyName="@nameof(product.CategoryName)" />
+                </td>
+                @* ListPrice *@
+                <td class="middle right">
+                    <EditableTextLabelColumnComponent Item="@product" PropertyName="@nameof(product.ListPrice)" Format="0.00" />
+                </td>
+                @* ProductTag *@
+                <td class="middle">
+                    <EditableTextLabelColumnComponent Item="@product" PropertyName="@nameof(product.ProductTagTypeName)" />
+                </td>
+            </EditableGridDataRow>
+        </RowTemplate>
+        <EditTemplate Context="product">
+            <EditableGridDataRow @key="product.UniqueId">
+                @* ItemCommand *@
+                <td class="middle center">
+                    <EditableItemEditButtonComponent Item="@product" />
+                </td>
+                <td class="middle center">
+                    <EditableItemDeleteButtonComponent Item="@product" />
+                </td>
+                @* ProductCode *@
+                <td class="middle">
+                    <EditableTextControlComponent @bind-Value="product.ProductId" EditableState="EditStateOptions.Added" />
+                </td>
+                @* ProductName *@
+                <td class="middle">
+                    <EditableTextControlComponent @bind-Value="product.ProductName" />
+                </td>
+                @* BrandCode *@
+                <td class="middle">
+                    <EditableSelectControlComponent TValue="string"
+                                                    TDropModel="BrandListItem"
+                                                    DropItems="BrandList"
+                                                    SelectedCallBack="product.SetBrand"
+                                                    @bind-Value="product.BrandId" />
+                    <EditableButtonComponent @onclick="OnBrandSelectClick">@WordResource.Search</EditableButtonComponent>
+                </td>
+                @* CategoryCode *@
+                <td class="middle">
+                    <EditableSelectControlComponent TValue="string"
+                                                    TDropModel="ProductCategoryListItem"
+                                                    DropItems="ProductCategoryList"
+                                                    SelectedCallBack="product.SetCategory"
+                                                    @bind-Value="product.CatetoryId" />
+                </td>
+                @* ListPrice *@
+                <td class="middle right">
+                    <EditableNumberControlComponent Format="0.00" @bind-Value="product.ListPrice" />
+                </td>
+                @* ProductTag *@
+                <td class="middle">
+                    <EditableCheckBoxListControlComponent TValue="ProductTagTypeOptions"
+                                                          TCheckModel="ProductTagTypeListItem"
+                                                          DropItems="ProductTagTypeList"
+                                                          CheckedCallBack="product.SetProductTagType"
+                                                          @bind-Value="product.ProductTagType"
+                                                          style="display:flex; flex-direction:column;" />
+                </td>
+            </EditableGridDataRow>
+        </EditTemplate>
+    </EditableGridComponent>
+</div>
+
+@*
+    --------------------------------------------------
+    option content
+    --------------------------------------------------
+*@
+<LayerManagerComponent @ref="LayerManager" class="optionbar">
+    @* SortOption *@
+    <SortOptionBarComponent TItem="ProductInputModel" Items="@Products" Name="SortOption" class="optionbar-content">
+        <SortConditionComponent PropertyName="@nameof(ProductInputModel.ProductId)" DisplayName="@($"{WordResource.Product}{WordResource.Code}")" />
+        <SortConditionComponent PropertyName="@nameof(ProductInputModel.ProductName)" DisplayName="@($"{WordResource.Product}{WordResource.Name}")" />
+        <SortConditionComponent PropertyName="@nameof(ProductInputModel.BrandId)" DisplayName="@($"{WordResource.Brand}{WordResource.Code}")" />
+        <SortConditionComponent PropertyName="@nameof(ProductInputModel.BrandName)" DisplayName="@($"{WordResource.Brand}{WordResource.Name}")" />
+        <SortConditionComponent PropertyName="@nameof(ProductInputModel.CatetoryId)" DisplayName="@($"{WordResource.Category}{WordResource.Code}")" />
+        <SortConditionComponent PropertyName="@nameof(ProductInputModel.CategoryName)" DisplayName="@($"{WordResource.Category}{WordResource.Name}")" />
+        <SortConditionComponent PropertyName="@nameof(ProductInputModel.ListPrice)" DisplayName="@($"{WordResource.ListPrice}")" />
+        <SortConditionComponent PropertyName="@nameof(ProductInputModel.ProductTagType)" DisplayName="@($"{WordResource.ProductTag}")" />
+    </SortOptionBarComponent>
+    @* BrandSelectorOption *@
+    <TemplateLayerComponent Name="BrandSelectorOption" class="optionbar-content">
+        <ListItemSelectorComponent TListItem="BrandListItem"
+                                   ListItems="BrandList"
+                                   class="table is-bordered is-hoverable is-slim is-color-patterned"
+                                   style="width:100%; table-layout:fixed; word-break: break-all;">
+            <TableColgroup>
+                <col style="width:30%;" />
+                <col style="width:70%;" />
+            </TableColgroup>
+            <TableHeader>
+                <EditableGridDataRow>
+                    <th class="middle center">@($"{WordResource.Code}")</th>
+                    <th class="middle center">@($"{WordResource.Name}")</th>
+                </EditableGridDataRow>
+                <EditableGridDataRow>
+                    <th><FilterConditionComponent PropertyName="@nameof(BrandListItem.Key)" /></th>
+                    <th><FilterConditionComponent PropertyName="@nameof(BrandListItem.Value)" /></th>
+                </EditableGridDataRow>
+            </TableHeader>
+            <RowTemplate Context="item">
+                <EditableGridDataRow>
+                    <td class="middle center"><button @onclick="(() => SetBrand(item))" type="button">@item.Key</button></td>
+                    <td class="middle">@item.Value</td>
+                </EditableGridDataRow>
+            </RowTemplate>
+        </ListItemSelectorComponent>
+    </TemplateLayerComponent>
+    @* HelpOption *@
+    <TemplateLayerComponent Name="HelpOption" class="optionbar-content">
+        マスタメンテナンス画面のサンプル。
+    </TemplateLayerComponent>
+</LayerManagerComponent>
