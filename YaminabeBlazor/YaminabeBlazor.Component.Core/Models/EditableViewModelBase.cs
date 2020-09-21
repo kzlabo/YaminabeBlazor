@@ -15,6 +15,7 @@
  */
 
 using System;
+using System.Text.Json.Serialization;
 using YaminabeBlazor.Component.Core.Enums;
 
 namespace YaminabeBlazor.Component.Core.Models
@@ -46,9 +47,11 @@ namespace YaminabeBlazor.Component.Core.Models
         public int Index { get; set; }
 
         /// <inheritdoc/>
+        [JsonIgnore]
         public Action StateHasChanged { get; set; }
 
         /// <inheritdoc/>
+        [JsonIgnore]
         public Action<IEditableViewModel> ItemRemoved { get; set; }
 
         #endregion

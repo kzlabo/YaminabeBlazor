@@ -13,4 +13,8 @@
     <RepositoryUrl>https://github.com/kzlabo/YaminabeBlazor</RepositoryUrl>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="4.7.2" />
+  </ItemGroup>
+
 </Project>
