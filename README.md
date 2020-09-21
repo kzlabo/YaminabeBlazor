@@ -5,6 +5,7 @@ Blazor WebAssembly を使った便利コンポーネントおよび業務アプ�
 |Package|License|Nuget|Note|
 |:---|:---|:---|:---|
 |[YaminabeBlazor.Component](https://github.com/kzlabo/YaminabeBlazor/)|[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/kzlabo/YaminabeBlazor/blob/master/LICENSE)|[![YaminabeBlazor.Component](https://img.shields.io/nuget/v/YaminabeBlazor.Component.svg)](https://www.nuget.org/packages/YaminabeBlazor.Component/)|Blazorコンポーネントライブラリ|
+|[YaminabeBlazor.Component.Core](https://github.com/kzlabo/YaminabeBlazor/)|[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/kzlabo/YaminabeBlazor/blob/master/LICENSE)|[![YaminabeBlazor.Component](https://img.shields.io/nuget/v/YaminabeBlazor.Component.Core.svg)](https://www.nuget.org/packages/YaminabeBlazor.Component.Core/)|Blazorコンポーネントライブラリ|
 |[YaminabeBlazor.Core](https://github.com/kzlabo/YaminabeBlazor/)|[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/kzlabo/YaminabeBlazor/blob/master/LICENSE)||サンプル|
 |[YaminabeBlazor.Db](https://github.com/kzlabo/YaminabeBlazor/)|[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/kzlabo/YaminabeBlazor/blob/master/LICENSE)||サンプル用のデータベース|
 |[YaminabeBlazor.Infrastructure](https://github.com/kzlabo/YaminabeBlazor/)|[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/kzlabo/YaminabeBlazor/blob/master/LICENSE)||サンプル|
@@ -15,6 +16,7 @@ Blazor WebAssembly を使った便利コンポーネントおよび業務アプ�
 
 デモページは[こちら](https://kind-river-07c33d900.azurestaticapps.net/)をクリック。
 
+<!--
 ## javascript を一切使わずに C# と CSS のみでここまでできる
 
 ![デモ1](images/demo1.gif "demo1")
@@ -22,3 +24,4 @@ Blazor WebAssembly を使った便利コンポーネントおよび業務アプ�
 ![デモ2](images/demo2.gif "demo2")
 
 ![デモ3](images/demo3.gif "demo3")
+-->
