@@ -219,6 +219,26 @@ namespace YaminabeBlazor.Component
                     return;
                 }
             }
+            else
+            {
+                // EditForm でカスケード指定されていない場合は直接 EditContext を作成して検証
+                //
+                // 例）下記のような構成ではない場合
+                // <EditForm>
+                //     ・・・
+                //     <EditableItemEditButtonComponent />
+                //     ・・・
+                // </EditForm>
+                var editContext = new EditContext(this.Item);
+                editContext.AddDataAnnotationsValidation();
+                var result = editContext.Validate();
+                this.OnValidate?.Invoke(editContext, result);
+
+                if (result == false)
+                {
+                    return;
+                }
+            }
 
             this.SetRead();
         }
