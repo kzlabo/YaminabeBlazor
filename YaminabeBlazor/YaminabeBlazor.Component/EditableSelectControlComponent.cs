@@ -16,6 +16,7 @@
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using System;
 using YaminabeBlazor.Component.Core.Enums;
 using YaminabeBlazor.Component.Core.Models;
 
@@ -63,6 +64,14 @@ namespace YaminabeBlazor.Component
                     if (this.DropItems != null)
                     {
                         var seq = 4;
+                        var type = typeof(TValue);
+                        if (typeof(string) == typeof(TValue) || Nullable.GetUnderlyingType(typeof(TValue)) != null)
+                        {
+                            builder.OpenElement(seq++, "option");
+                            builder.AddAttribute(seq++, "value", string.Empty);
+                            builder.AddContent(seq++, string.Empty);
+                            builder.CloseElement();
+                        }
                         foreach (var dropItem in this.DropItems)
                         {
                             builder.OpenElement(seq++, "option");
