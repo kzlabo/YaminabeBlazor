@@ -15,6 +15,30 @@
 *@
 @typeparam TItem
 
-<button @onclick="OnAddItemClick" @attributes="AdditionalAttributes" disabled="@IsDisabled()" type="button">
-    @ChildContent
-</button>
+@if (Items.IsTemporaryMode == true)
+{
+    <button @onclick="OnAddItemCompoleteClick" @attributes="AdditionalAttributes" disabled="@IsDisabled()" type="button">
+        @if (ChildContent == null)
+        {
+            @CompleteText
+        }
+        else
+        {
+            @ChildContent
+
+        }
+    </button>
+}
+else
+{
+    <button @onclick="OnAddItemClick" @attributes="AdditionalAttributes" disabled="@IsDisabled()" type="button">
+        @if (ChildContent == null)
+        {
+            @AddText
+        }
+        else
+        {
+            @ChildContent
+        }
+    </button>
+}

@@ -62,6 +62,27 @@ namespace YaminabeBlazor.Component
 
         #endregion
 
+        #region -------------------- is / can --------------------
+
+        /// <summary>
+        /// ページングの使用不可状態を取得または設定します。
+        /// </summary>
+        /// <returns>
+        /// ページングが使用不可な場合は <c>true</c> 。使用可の場合は <c>false</c> を返却します。
+        /// </returns>
+        /// <remarks>
+        /// 一時入力モード状態の場合はページングを提供せずに全件表示。
+        /// </remarks>
+        public bool IsDisabled
+        {
+            get
+            {
+                return this.Items.IsTemporaryMode;
+            }
+        }
+
+        #endregion
+
         #region -------------------- life cycle --------------------
 
         /// <summary>
@@ -102,14 +123,15 @@ namespace YaminabeBlazor.Component
 
             builder.OpenElement(0, "button");
             builder.AddMultipleAttributes(1, this.AdditionalAttributes);
-            builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(
+            builder.AddAttribute(2, "disabled", this.IsDisabled);
+            builder.AddAttribute(3, "onclick", EventCallback.Factory.Create(
                 this, 
                 () =>
                 {
                     this.Items.MoveNextPage();
                     this.Items.StateHasChanged();
                 }));
-            builder.AddContent(3, this.ChildContent);
+            builder.AddContent(4, this.ChildContent);
             builder.CloseElement();
 
             base.BuildRenderTree(builder);

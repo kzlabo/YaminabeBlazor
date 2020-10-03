@@ -15,6 +15,7 @@
  */
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using YaminabeBlazor.Component.Core.Models;
 
@@ -34,6 +35,12 @@ namespace YaminabeBlazor.Component
         #region -------------------- property --------------------
 
         /// <summary>
+        /// コンポーネントの設定アクセサを取得または設定します。
+        /// </summary>
+        [Inject]
+        private IOptions<YaminabeBlazorOptions> OptionsAccesor { get; set; }
+
+        /// <summary>
         /// データアイテムリストを取得または設定します。
         /// </summary>
         [Parameter]
@@ -50,6 +57,28 @@ namespace YaminabeBlazor.Component
         /// </summary>
         [Parameter(CaptureUnmatchedValues = true)]
         public IDictionary<string, object> AdditionalAttributes { get; set; }
+
+        /// <summary>
+        /// 追加入力モードボタンテキストを取得します。
+        /// </summary>
+        private string AddText
+        {
+            get
+            {
+                return this.OptionsAccesor.Value.GetWordResouce(nameof(WordResource.ItemsAddInput));
+            }
+        }
+
+        /// <summary>
+        /// 追加入力確定ボタンテキストを取得します。
+        /// </summary>
+        public string CompleteText
+        {
+            get
+            {
+                return this.OptionsAccesor.Value.GetWordResouce(nameof(WordResource.ItemsCompleteInput));
+            }
+        }
 
         #endregion
 
@@ -74,11 +103,23 @@ namespace YaminabeBlazor.Component
         #region -------------------- method --------------------
 
         /// <summary>
-        /// アイテムリストに新規アイテムを追加します。
+        /// データアイテムリストを追加入力モードに設定します。
         /// </summary>
         public void AddNewItem()
         {
-            this.Items.AddNewItem();
+            // 新規入力行追加時にはモードを一時入力モードに移行し新規行しか表示しない
+            // ※グリッドの末尾に新規入力行を追加すると無限スクロールでのページング時に全表示の必要がある為
+            this.Items.SetTemporary();
+            this.Items.StateHasChanged();
+        }
+
+        /// <summary>
+        /// データアイテムリストを通常モードに設定し、一時入力されたアイテムを確定します。
+        /// </summary>
+        public void AddItemComplete()
+        {
+            this.Items.CommitTemporary();
+            this.Items.StateHasChanged();
         }
 
         #endregion
@@ -86,11 +127,19 @@ namespace YaminabeBlazor.Component
         #region -------------------- event --------------------
 
         /// <summary>
-        /// 追加ボタン押下時の処理を行います。
+        /// 追加入力ボタン押下時の処理を行います。
         /// </summary>
         private void OnAddItemClick()
         {
             this.AddNewItem();
+        }
+
+        /// <summary>
+        /// 追加確定ボタン押下時の処理を行います。
+        /// </summary>
+        private void OnAddItemCompoleteClick()
+        {
+            this.AddItemComplete();
         }
 
         #endregion

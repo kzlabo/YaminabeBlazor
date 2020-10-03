@@ -37,6 +37,16 @@ namespace YaminabeBlazor.Component.Core.Models
         #region -------------------- property --------------------
 
         /// <summary>
+        /// 一時入力モードかどうかの判定を取得または設定します。
+        /// </summary>
+        public bool IsTemporaryMode { get; set; }
+
+        /// <summary>
+        /// 一時入力データリストを取得または設定します。
+        /// </summary>
+        private List<TItem> TemporaryItems { get; set; }
+
+        /// <summary>
         /// ページング種別を取得または設定します。
         /// </summary>
         public PagingTypeOptions PagingType { get; set; }
@@ -60,6 +70,11 @@ namespace YaminabeBlazor.Component.Core.Models
         /// ページグループのサイズを取得または設定します。
         /// </summary>
         public int PageGroupSize { get; set; } = 10;
+
+        /// <summary>
+        /// 一時入力アイテム数を取得または設定します。
+        /// </summary>
+        public int TemporarySize { get; set; } = 10;
 
         /// <summary>
         /// フィルタ条件リストを取得または設定します。
@@ -111,19 +126,21 @@ namespace YaminabeBlazor.Component.Core.Models
         {
             get
             {
-                if (this.SortItems == null)
+                // 一時入力モードのデータアイテムに対してはページング・フィルタ・ソートは無効
+                if (this.IsTemporaryMode == true)
                 {
-                    return null;
+                    return this.TemporaryItems;
                 }
 
+                // ページング設定に応じた範囲を取得
                 switch (this.PagingType)
                 {
                     case PagingTypeOptions.None:
                         return this.SortItems;
                     case PagingTypeOptions.Scroll:
-                        return this.SortItems.Take(this.PageIndex * this.PageRowSize);
+                        return this.SortItems?.Take(this.PageIndex * this.PageRowSize);
                     case PagingTypeOptions.Pagination:
-                        return this.SortItems.Skip((this.PageIndex - 1) * this.PageRowSize).Take(this.PageRowSize);
+                        return this.SortItems?.Skip((this.PageIndex - 1) * this.PageRowSize).Take(this.PageRowSize);
                     default:
                         throw new InvalidOperationException($"not support {this.PagingType.GetType()}");
                 }
@@ -311,6 +328,20 @@ namespace YaminabeBlazor.Component.Core.Models
         }
 
         /// <summary>
+        /// 一時入力データアイテムを削除します。
+        /// </summary>
+        /// <param name="item">データアイテム。</param>
+        private void TemporaryItemRemoved(IEditableViewModel item)
+        {
+            item.StateHasChanged -= this.StateHasChanged;
+            item.ItemRemoved -= this.TemporaryItemRemoved;
+
+            this.TemporaryItems.Remove((TItem)item);
+
+            this.StateHasChanged?.Invoke();
+        }
+
+        /// <summary>
         /// 次のページ位置に変更します。
         /// </summary>
         public void MoveNextPage()
@@ -358,6 +389,43 @@ namespace YaminabeBlazor.Component.Core.Models
             {
                 this.PageGroupIndex++;
             }
+        }
+
+        /// <summary>
+        /// 一時入力モードに設定します。
+        /// </summary>
+        public void SetTemporary()
+        {
+            this.TemporaryItems = this.TemporaryItems ?? new List<TItem>();
+            for (var i = this.TemporaryItems.Count; i < this.TemporarySize; i++)
+            {
+                var item = (TItem)Activator.CreateInstance(typeof(TItem));
+                item.EditState = EditStateOptions.Added;
+                item.StateHasChanged += this.StateHasChanged;
+                item.ItemRemoved += this.TemporaryItemRemoved;
+
+                this.TemporaryItems.Add(item);
+            }
+
+            this.IsTemporaryMode = true;
+        }
+
+        /// <summary>
+        /// 一時入力モードで入力したアイテムを確定します。
+        /// </summary>
+        public void CommitTemporary()
+        {
+            // 確定対象のアイテムをデータアイテムリストに移動
+            foreach (var item in this.TemporaryItems.Where(item => item.EditMode == EditModeOptions.Read && item.EditState.HasFlag(EditStateOptions.Changed) == true))
+            {
+                item.ItemRemoved -= this.TemporaryItemRemoved;
+                item.ItemRemoved += this.ItemRemoved;
+                this.Add(item);
+            }
+            // 確定したアイテムの削除
+            this.TemporaryItems.RemoveAll(item => item.EditMode == EditModeOptions.Read && item.EditState.HasFlag(EditStateOptions.Changed) == true);
+
+            this.IsTemporaryMode = false;
         }
 
         #endregion

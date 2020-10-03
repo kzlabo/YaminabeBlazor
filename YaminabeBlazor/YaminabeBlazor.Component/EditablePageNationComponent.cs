@@ -79,6 +79,61 @@ namespace YaminabeBlazor.Component
 
         #endregion
 
+        #region -------------------- is / can --------------------
+
+        /// <summary>
+        /// ページングの使用不可状態を取得または設定します。
+        /// </summary>
+        /// <returns>
+        /// ページングが使用不可な場合は <c>true</c> 。使用可の場合は <c>false</c> を返却します。
+        /// </returns>
+        /// <remarks>
+        /// 一時入力モード状態の場合はページングを提供せずに全件表示。
+        /// </remarks>
+        public bool IsDisabled
+        {
+            get
+            {
+                return this.Items.IsTemporaryMode;
+            }
+        }
+
+        /// <summary>
+        /// 前ページングの使用不可状態を取得または設定します。
+        /// </summary>
+        /// <returns>
+        /// 前ページングが使用不可な場合は <c>true</c> 。使用可の場合は <c>false</c> を返却します。
+        /// </returns>
+        /// <remarks>
+        /// 一時入力モード状態の場合または開始ページグループの場合は使用不可。
+        /// </remarks>
+        public bool IsPreviousPagingDisabled
+        {
+            get
+            {
+                return this.IsDisabled || this.Items.IsStartPageGroupIndex;
+            }
+        }
+
+        /// <summary>
+        /// 次ページングの使用不可状態を取得または設定します。
+        /// </summary>
+        /// <returns>
+        /// 次ページングが使用不可な場合は <c>true</c> 。使用可の場合は <c>false</c> を返却します。
+        /// </returns>
+        /// <remarks>
+        /// 一時入力モード状態の場合または終了ページグループの場合は使用不可。
+        /// </remarks>
+        public bool IsNextPagingDisabled
+        {
+            get
+            {
+                return this.IsDisabled || this.Items.IsLastPageGroupIndex;
+            }
+        }
+
+        #endregion
+
         #region -------------------- life cycle --------------------
 
         /// <summary>
@@ -125,7 +180,7 @@ namespace YaminabeBlazor.Component
             // 前へ
             builder.OpenElement(3, "li");
             builder.OpenElement(4, "button");
-            builder.AddAttribute(5, "disabled", this.Items.IsStartPageGroupIndex);
+            builder.AddAttribute(5, "disabled", this.IsPreviousPagingDisabled);
             builder.AddAttribute(6, "style", "width:4.0rem; height:1.5rem;");
             builder.AddAttribute(7, "onclick", EventCallback.Factory.Create(
                 this,
@@ -147,7 +202,7 @@ namespace YaminabeBlazor.Component
                 var index = i;
                 builder.OpenElement(seq++, "li");
                 builder.OpenElement(seq++, "button");
-                builder.AddAttribute(seq++, "disabled", index == this.Items.PageIndex);
+                builder.AddAttribute(seq++, "disabled", this.IsDisabled || index == this.Items.PageIndex);
                 builder.AddAttribute(seq++, "style", "width:3.0rem; height:1.5rem;");
                 builder.AddAttribute(seq++, "onclick", EventCallback.Factory.Create(
                     this,
@@ -165,7 +220,7 @@ namespace YaminabeBlazor.Component
             // 次へ
             builder.OpenElement(9, "li");
             builder.OpenElement(10, "button");
-            builder.AddAttribute(11, "disabled", this.Items.IsLastPageGroupIndex);
+            builder.AddAttribute(11, "disabled", this.IsNextPagingDisabled);
             builder.AddAttribute(12, "style", "width:4.0rem; height:1.5rem;");
             builder.AddAttribute(13, "onclick", EventCallback.Factory.Create(
                 this,

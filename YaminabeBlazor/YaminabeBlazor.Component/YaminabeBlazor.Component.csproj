@@ -34,4 +34,21 @@
     <ProjectReference Include="..\YaminabeBlazor.Component.Core\YaminabeBlazor.Component.Core.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Compile Update="WordResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WordResource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <EmbeddedResource Update="WordResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WordResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
