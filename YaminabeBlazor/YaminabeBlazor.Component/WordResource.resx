@@ -117,10 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Close" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
   <data name="ItemsAddInput" xml:space="preserve">
     <value>追加入力</value>
   </data>
   <data name="ItemsCompleteInput" xml:space="preserve">
     <value>追加確定</value>
+  </data>
+  <data name="PagenationNext" xml:space="preserve">
+    <value>次へ</value>
+  </data>
+  <data name="PagenationPrevious" xml:space="preserve">
+    <value>前へ</value>
+  </data>
+  <data name="SortOff" xml:space="preserve">
+    <value>ソート解除</value>
+  </data>
+  <data name="SortOn" xml:space="preserve">
+    <value>ソート実行</value>
   </data>
 </root>

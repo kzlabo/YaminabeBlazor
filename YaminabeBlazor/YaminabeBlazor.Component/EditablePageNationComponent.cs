@@ -16,6 +16,7 @@
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using YaminabeBlazor.Component.Core.Enums;
@@ -35,6 +36,12 @@ namespace YaminabeBlazor.Component
         where TItem : IEditableViewModel
     {
         #region -------------------- property --------------------
+
+        /// <summary>
+        /// コンポーネントの設定アクセサを取得または設定します。
+        /// </summary>
+        [Inject]
+        private IOptions<YaminabeBlazorOptions> OptionsAccesor { get; set; }
 
         /// <summary>
         /// データアイテムリストを取得または設定します。
@@ -132,6 +139,28 @@ namespace YaminabeBlazor.Component
             }
         }
 
+        /// <summary>
+        /// 前ページングテキストを取得します。
+        /// </summary>
+        private string PreviousText
+        {
+            get
+            {
+                return this.OptionsAccesor.Value.GetWordResouce(nameof(WordResource.PagenationPrevious));
+            }
+        }
+
+        /// <summary>
+        /// 次ページングテキストを取得します。
+        /// </summary>
+        public string NextText
+        {
+            get
+            {
+                return this.OptionsAccesor.Value.GetWordResouce(nameof(WordResource.PagenationNext));
+            }
+        }
+
         #endregion
 
         #region -------------------- life cycle --------------------
@@ -189,7 +218,7 @@ namespace YaminabeBlazor.Component
                     this.Items.MovePreviousPageGroup();
                     this.Items.StateHasChanged();
                 }));
-            builder.AddContent(8, "前へ");
+            builder.AddContent(8, this.PreviousText);
             builder.CloseElement();
             builder.CloseElement();
 
@@ -229,7 +258,7 @@ namespace YaminabeBlazor.Component
                     this.Items.MoveNextPageGroup();
                     this.Items.StateHasChanged();
                 }));
-            builder.AddContent(14, "次へ");
+            builder.AddContent(14, this.NextText);
             builder.CloseElement();
             builder.CloseElement();
 

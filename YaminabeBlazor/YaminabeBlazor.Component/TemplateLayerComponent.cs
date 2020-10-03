@@ -16,6 +16,7 @@
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.Extensions.Options;
 
 namespace YaminabeBlazor.Component
 {
@@ -31,10 +32,27 @@ namespace YaminabeBlazor.Component
         #region -------------------- property --------------------
 
         /// <summary>
+        /// コンポーネントの設定アクセサを取得または設定します。
+        /// </summary>
+        [Inject]
+        private IOptions<YaminabeBlazorOptions> OptionsAccesor { get; set; }
+
+        /// <summary>
         /// 子コンテンツを取得または設定します。
         /// </summary>
         [Parameter]
         public RenderFragment ChildContent { get; set; }
+
+        /// <summary>
+        /// 閉じるボタンテキストを取得します。
+        /// </summary>
+        private string CloseText
+        {
+            get
+            {
+                return this.OptionsAccesor.Value.GetWordResouce(nameof(WordResource.Close));
+            }
+        }
 
         #endregion
 
@@ -73,7 +91,7 @@ namespace YaminabeBlazor.Component
             builder.OpenElement(1, "button");
             builder.AddAttribute(2, "type", "button");
             builder.AddAttribute(3, "onclick", EventCallback.Factory.Create(this, OnHideClick));
-            builder.AddContent(4, "閉じる");
+            builder.AddContent(4, this.CloseText);
             builder.CloseElement();
             builder.CloseElement();
         }

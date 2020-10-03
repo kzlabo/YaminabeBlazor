@@ -16,6 +16,7 @@
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Linq;
 using YaminabeBlazor.Component.Core.Enums;
@@ -38,6 +39,12 @@ namespace YaminabeBlazor.Component
         #region -------------------- property --------------------
 
         /// <summary>
+        /// コンポーネントの設定アクセサを取得または設定します。
+        /// </summary>
+        [Inject]
+        private IOptions<YaminabeBlazorOptions> OptionsAccesor { get; set; }
+
+        /// <summary>
         /// データアイテムリストを取得または設定します。
         /// </summary>
         [Parameter]
@@ -53,6 +60,39 @@ namespace YaminabeBlazor.Component
         /// ソート条件リストを取得または設定します。
         /// </summary>
         public List<SortConditionComponent> SortConditions { get; set; } = new List<SortConditionComponent>();
+
+        /// <summary>
+        /// ソート実行ボタンテキストを取得します。
+        /// </summary>
+        private string SortOnText
+        {
+            get
+            {
+                return this.OptionsAccesor.Value.GetWordResouce(nameof(WordResource.SortOn));
+            }
+        }
+
+        /// <summary>
+        /// ソート解除ボタンテキストを取得します。
+        /// </summary>
+        private string SortOffText
+        {
+            get
+            {
+                return this.OptionsAccesor.Value.GetWordResouce(nameof(WordResource.SortOff));
+            }
+        }
+
+        /// <summary>
+        /// 閉じるボタンテキストを取得します。
+        /// </summary>
+        private string CloseText
+        {
+            get
+            {
+                return this.OptionsAccesor.Value.GetWordResouce(nameof(WordResource.Close));
+            }
+        }
 
         #endregion
 
@@ -205,19 +245,19 @@ namespace YaminabeBlazor.Component
             builder.OpenElement(1, "button");
             builder.AddAttribute(2, "type", "button");
             builder.AddAttribute(3, "onclick", EventCallback.Factory.Create(this, this.OnSortClick));
-            builder.AddContent(4, "実行");
+            builder.AddContent(4, this.SortOnText);
             builder.CloseElement();
 
             builder.OpenElement(5, "button");
             builder.AddAttribute(6, "type", "button");
             builder.AddAttribute(7, "onclick", EventCallback.Factory.Create(this, this.OnSortCancel));
-            builder.AddContent(8, "解除");
+            builder.AddContent(8, this.SortOffText);
             builder.CloseElement();
 
             builder.OpenElement(9, "button");
             builder.AddAttribute(10, "type", "button");
             builder.AddAttribute(11, "onclick", EventCallback.Factory.Create(this, this.OnHideClick));
-            builder.AddContent(12, "閉じる");
+            builder.AddContent(12, this.CloseText);
             builder.CloseElement();
 
             builder.CloseElement();

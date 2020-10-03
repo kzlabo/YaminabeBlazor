@@ -61,6 +61,15 @@ namespace YaminabeBlazor.Component {
         }
         
         /// <summary>
+        ///   閉じる に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string Close {
+            get {
+                return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   追加入力 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string ItemsAddInput {
@@ -75,6 +84,42 @@ namespace YaminabeBlazor.Component {
         internal static string ItemsCompleteInput {
             get {
                 return ResourceManager.GetString("ItemsCompleteInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   次へ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PagenationNext {
+            get {
+                return ResourceManager.GetString("PagenationNext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   前へ に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string PagenationPrevious {
+            get {
+                return ResourceManager.GetString("PagenationPrevious", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   ソート解除 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string SortOff {
+            get {
+                return ResourceManager.GetString("SortOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   ソート実行 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string SortOn {
+            get {
+                return ResourceManager.GetString("SortOn", resourceCulture);
             }
         }
     }
