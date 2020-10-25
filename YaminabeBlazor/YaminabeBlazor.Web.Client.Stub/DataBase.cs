@@ -365,7 +365,7 @@ namespace YaminabeBlazor.Web.Client.Stub
             {
                 DataBase.Products.Add(
                     ProductFactory.Load(
-                        productId: $"99999999{i:4}",
+                        productId: $"99999999{i:D4}",
                         productName: $"テスト商品 {i}",
                         brandId: "99999",
                         catetoryId: "999",
