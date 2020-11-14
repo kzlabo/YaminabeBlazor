@@ -183,38 +183,51 @@ namespace YaminabeBlazor.Component.Core.Extensions
             Dictionary<string, (string PropertyName, bool Desc)> sortConditionValues
             )
         {
+            // ソート条件が未指定の場合は無視
             if ((sortConditionValues?.Count ?? 0) == 0)
             {
                 return items;
             }
 
+            // プロパティ項目へのアクセス高速化の為にアクセサの作成
+            var properties = typeof(T).GetProperties();
+            var accessors = new Dictionary<string, IAccessor>();
+            foreach (var sortCondition in sortConditionValues)
+            {
+                var property = properties.FirstOrDefault(p => p.Name.Equals(sortCondition.Key));
+                accessors[property.Name] = property.ToAccessor();
+
+            }
+
+            // ソート条件でデータアイテムをソート
             bool first = true;
             IOrderedEnumerable<T> workintItems = null;
             foreach (var sortCondition in sortConditionValues.Values)
             {
-                var prop = typeof(T).GetProperty(sortCondition.PropertyName);
+                var accessor = accessors[sortCondition.PropertyName];
+
                 if (first == true)
                 {
                     first = false;
 
                     if (sortCondition.Desc == false)
                     {
-                        workintItems = items.OrderBy(item => prop.GetValue(item));
+                        workintItems = items.OrderBy(item => accessor.GetValue(item));
                     }
                     else
                     {
-                        workintItems = items.OrderByDescending(item => prop.GetValue(item));
+                        workintItems = items.OrderByDescending(item => accessor.GetValue(item));
                     }
                 }
                 else
                 {
                     if (sortCondition.Desc == false)
                     {
-                        workintItems = workintItems.ThenBy(item => prop.GetValue(item));
+                        workintItems = workintItems.ThenBy(item => accessor.GetValue(item));
                     }
                     else
                     {
-                        workintItems = workintItems.ThenByDescending(item => prop.GetValue(item));
+                        workintItems = workintItems.ThenByDescending(item => accessor.GetValue(item));
                     }
                 }
             }
@@ -235,28 +248,35 @@ namespace YaminabeBlazor.Component.Core.Extensions
             Dictionary<string, (string FilterText, bool PartialMatch)> filterConditionValues
             )
         {
+            // フィルタ条件が未指定の場合は無視
             if ((filterConditionValues?.Count ?? 0) == 0)
             {
                 return items;
             }
 
+            // プロパティ項目へのアクセス高速化の為にアクセサの作成
+            var properties = typeof(T).GetProperties();
+            var accessors = new Dictionary<string, IAccessor>();
+            foreach (var filterCondition in filterConditionValues)
+            {
+                var property = properties.FirstOrDefault(p => p.Name.Equals(filterCondition.Key));
+                accessors[property.Name] = property.ToAccessor();
+
+            }
+
+            // フィルタ条件に合致するデータアイテムを返却
             return items?.Where(item =>
             {
-                var properties = item.GetType().GetProperties();
-                if (filterConditionValues != null)
+                foreach (var filterCondition in filterConditionValues)
                 {
-                    foreach (var filterCondition in filterConditionValues)
+                    var accessor = accessors[filterCondition.Key];
+                    var filterConditionConfig = filterCondition.Value;
+                    if (MatchFilterCondition(accessor.GetValue(item), filterConditionConfig.FilterText, filterConditionConfig.PartialMatch) == false)
                     {
-                        var property = properties.FirstOrDefault(p => p.Name.Equals(filterCondition.Key));
-                        var filterConditionConfig = filterCondition.Value;
-                        if (MatchFilterCondition(property.GetValue(item), filterConditionConfig.FilterText, filterConditionConfig.PartialMatch) == false)
-                        {
-                            return false;
-                        }
+                        return false;
                     }
-                    return true;
                 }
-                return false;
+                return true;
             });
         }
 
