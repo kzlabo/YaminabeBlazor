@@ -35,13 +35,21 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
     /// </revisionHistory>
     public class ProductCategoriesApiService : IProductCategoriesApiService
     {
+        #region -------------------- field --------------------
+
+        private DataBase _dataBase;
+
+        #endregion
+
         #region -------------------- constructor --------------------
 
         /// <summary>
         /// <see cref="ProductCategoriesApiService"/> クラスの新しいインスタンスを作成します。
         /// </summary>
-        public ProductCategoriesApiService()
+        /// <param name="database">データベース。</param>
+        public ProductCategoriesApiService(DataBase database)
         {
+            this._dataBase = database;
         }
 
         #endregion
@@ -60,7 +68,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
             {
                 var producCategories = new List<ProductCategoryInputModel>();
 
-                foreach (var productCategory in DataBase.ProductCategories)
+                foreach (var productCategory in this._dataBase.ProductCategories)
                 {
                     producCategories.Add(new ProductCategoryInputModel()
                     {
@@ -91,10 +99,10 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 // 追加
                 foreach (var productCategory in addedProductCategories)
                 {
-                    var addedProductCategory = DataBase.ProductCategories.FirstOrDefault(p => p.CategoryId.Equals(productCategory.CategoryId));
+                    var addedProductCategory = this._dataBase.ProductCategories.FirstOrDefault(p => p.CategoryId.Equals(productCategory.CategoryId));
                     if (addedProductCategory == null)
                     {
-                        DataBase.ProductCategories.Add(ProductCategoryFactory.Create(
+                        this._dataBase.ProductCategories.Add(ProductCategoryFactory.Create(
                             categoryId: productCategory.CategoryId,
                             categoryName: productCategory.CategoryName,
                             updateDateTime: updateDateTime,
@@ -106,7 +114,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 // 更新
                 foreach (var productCategory in modifiedProductCategories)
                 {
-                    var modifiedProductCategory = DataBase.ProductCategories.FirstOrDefault(p => p.CategoryId.Equals(productCategory.CategoryId));
+                    var modifiedProductCategory = this._dataBase.ProductCategories.FirstOrDefault(p => p.CategoryId.Equals(productCategory.CategoryId));
                     if (modifiedProductCategory == null)
                     {
                         continue;
@@ -119,12 +127,12 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 // 削除
                 foreach (var productCategory in deletedProductCategories)
                 {
-                    var deletedProductCategory = DataBase.ProductCategories.FirstOrDefault(p => p.CategoryId.Equals(productCategory.CategoryId));
+                    var deletedProductCategory = this._dataBase.ProductCategories.FirstOrDefault(p => p.CategoryId.Equals(productCategory.CategoryId));
                     if (deletedProductCategory == null)
                     {
                         continue;
                     }
-                    DataBase.ProductCategories.Remove(deletedProductCategory);
+                    this._dataBase.ProductCategories.Remove(deletedProductCategory);
                 }
 
                 return HttpStatusCode.OK;

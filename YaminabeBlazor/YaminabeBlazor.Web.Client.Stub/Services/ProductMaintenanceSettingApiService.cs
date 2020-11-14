@@ -33,11 +33,18 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
     /// </revisionHistory>
     public class ProductMaintenanceSettingApiService : IProductMaintenanceSettingApiService
     {
+        #region -------------------- field --------------------
+
+        private DataBase _dataBase;
+
+        #endregion
+
         #region -------------------- property --------------------
 
         /// <summary>
         /// オンメモリ上での商品マスタメンテナンス設定を取得または設定します。
         /// </summary>
+        /// <param name="database">データベース。</param>
         private ProductMaintenanceSettingDto ProductMaintenanceSetting { get; set; }
 
         #endregion
@@ -47,13 +54,14 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
         /// <summary>
         /// <see cref="ProductMaintenanceSettingApiService"/> クラスの新しいインスタンスを作成します。
         /// </summary>
-        public ProductMaintenanceSettingApiService(
-            )
+        public ProductMaintenanceSettingApiService(DataBase database)
         {
+            this._dataBase = database;
+
             var productMaintenanceSetting = new ProductMaintenanceSettingDto();
 
             // ブランド
-            productMaintenanceSetting.BrandList = DataBase.Brands.Select<BrandEntityModel, BrandListItem>(
+            productMaintenanceSetting.BrandList = this._dataBase.Brands.Select<BrandEntityModel, BrandListItem>(
                 b => 
                 new BrandListItem()
                 {
@@ -63,7 +71,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 }).ToList();
 
             // 商品カテゴリ
-            productMaintenanceSetting.ProductCategoryList = DataBase.ProductCategories.Select<ProductCategoryEntityModel, ProductCategoryListItem>(
+            productMaintenanceSetting.ProductCategoryList = this._dataBase.ProductCategories.Select<ProductCategoryEntityModel, ProductCategoryListItem>(
                 p => 
                 new ProductCategoryListItem()
                 {
@@ -72,7 +80,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 }).ToList();
 
             // 商品タグ
-            productMaintenanceSetting.ProductTagTypeList = DataBase.ProductTagTypes.Select<ProductTagTypeModel, ProductTagTypeListItem>(
+            productMaintenanceSetting.ProductTagTypeList = this._dataBase.ProductTagTypes.Select<ProductTagTypeModel, ProductTagTypeListItem>(
                 p =>
                 new ProductTagTypeListItem()
                 {

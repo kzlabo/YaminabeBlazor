@@ -34,6 +34,12 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
     /// </revisionHistory>
     public class CustomerMaintenanceSettingApiService : ICustomerMaintenanceSettingApiService
     {
+        #region -------------------- field --------------------
+
+        private DataBase _dataBase;
+
+        #endregion
+
         #region -------------------- property --------------------
 
         /// <summary>
@@ -48,13 +54,15 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
         /// <summary>
         /// <see cref="CustomerMaintenanceSettingApiService"/> クラスの新しいインスタンスを作成します。
         /// </summary>
-        public CustomerMaintenanceSettingApiService(
-            )
+        /// <param name="database">データベース。</param>
+        public CustomerMaintenanceSettingApiService(DataBase database)
         {
+            this._dataBase = database;
+
             var customerMaintenanceSetting = new CustomerMaintenanceSettingDto();
 
             // 締日区分
-            customerMaintenanceSetting.CutoffDateTypeList = DataBase.CutoffDateTypes.Select<CutoffDateTypeModel, CutoffDateTypeListItem>(
+            customerMaintenanceSetting.CutoffDateTypeList = this._dataBase.CutoffDateTypes.Select<CutoffDateTypeModel, CutoffDateTypeListItem>(
                 c =>
                 new CutoffDateTypeListItem()
                 {
@@ -63,7 +71,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 }).ToList();
 
             // 回収日区分
-            customerMaintenanceSetting.CollectionDateTypeList = DataBase.CollectionDateTypes.Select<CollectionDateTypeModel, CollectionDateTypeListItem>(
+            customerMaintenanceSetting.CollectionDateTypeList = this._dataBase.CollectionDateTypes.Select<CollectionDateTypeModel, CollectionDateTypeListItem>(
                 c =>
                 new CollectionDateTypeListItem()
                 {
@@ -72,7 +80,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 }).ToList();
 
             // 消費税区分
-            customerMaintenanceSetting.TaxTypeList = DataBase.TaxTypes.Select<TaxTypeModel, TaxTypeListItem>(
+            customerMaintenanceSetting.TaxTypeList = this._dataBase.TaxTypes.Select<TaxTypeModel, TaxTypeListItem>(
                 t =>
                 new TaxTypeListItem()
                 {
@@ -81,7 +89,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 }).ToList();
 
             // 消費税計算区分
-            customerMaintenanceSetting.TaxCalcTypeList = DataBase.TaxCalcTypes.Select<TaxCalcTypeModel, TaxCalcTypeListItem>(
+            customerMaintenanceSetting.TaxCalcTypeList = this._dataBase.TaxCalcTypes.Select<TaxCalcTypeModel, TaxCalcTypeListItem>(
                 t =>
                 new TaxCalcTypeListItem()
                 {
@@ -90,7 +98,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 }).ToList();
 
             // 消費税端数処理区分
-            customerMaintenanceSetting.TaxRoundTypeList = DataBase.TaxRoundTypes.Select<TaxRoundTypeModel, TaxRoundTypeListItem>(
+            customerMaintenanceSetting.TaxRoundTypeList = this._dataBase.TaxRoundTypes.Select<TaxRoundTypeModel, TaxRoundTypeListItem>(
                 t =>
                 new TaxRoundTypeListItem()
                 {

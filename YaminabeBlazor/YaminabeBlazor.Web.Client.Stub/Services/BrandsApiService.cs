@@ -35,13 +35,21 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
     /// </revisionHistory>
     public class BrandsApiService : IBrandsApiService
     {
+        #region -------------------- field --------------------
+
+        private DataBase _dataBase;
+
+        #endregion
+
         #region -------------------- constructor --------------------
 
         /// <summary>
         /// <see cref="BrandsApiService"/> クラスの新しいインスタンスを作成します。
         /// </summary>
-        public BrandsApiService()
+        /// <param name="database">データベース。</param>
+        public BrandsApiService(DataBase database)
         {
+            this._dataBase = database;
         }
 
         #endregion
@@ -60,7 +68,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
             {
                 var brands = new List<BrandInputModel>();
 
-                foreach (var brand in DataBase.Brands)
+                foreach (var brand in this._dataBase.Brands)
                 {
                     brands.Add(new BrandInputModel()
                     {
@@ -91,10 +99,10 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 // 追加
                 foreach (var brand in addedBrands)
                 {
-                    var addedBrand = DataBase.Brands.FirstOrDefault(p => p.BrandId.Equals(brand.BrandId));
+                    var addedBrand = this._dataBase.Brands.FirstOrDefault(p => p.BrandId.Equals(brand.BrandId));
                     if (addedBrand == null)
                     {
-                        DataBase.Brands.Add(BrandFactory.Create(
+                        this._dataBase.Brands.Add(BrandFactory.Create(
                             brandId: brand.BrandId,
                             brandName: brand.BrandName,
                             note: brand.Note,
@@ -107,7 +115,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 // 更新
                 foreach (var brand in modifiedBrands)
                 {
-                    var modifiedBrand = DataBase.Brands.FirstOrDefault(p => p.BrandId.Equals(brand.BrandId));
+                    var modifiedBrand = this._dataBase.Brands.FirstOrDefault(p => p.BrandId.Equals(brand.BrandId));
                     if (modifiedBrand == null)
                     {
                         continue;
@@ -121,12 +129,12 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 // 削除
                 foreach (var brand in deletedBrands)
                 {
-                    var deletedBrand = DataBase.Brands.FirstOrDefault(p => p.BrandId.Equals(brand.BrandId));
+                    var deletedBrand = this._dataBase.Brands.FirstOrDefault(p => p.BrandId.Equals(brand.BrandId));
                     if (deletedBrand == null)
                     {
                         continue;
                     }
-                    DataBase.Brands.Remove(deletedBrand);
+                    this._dataBase.Brands.Remove(deletedBrand);
                 }
 
                 return HttpStatusCode.OK;

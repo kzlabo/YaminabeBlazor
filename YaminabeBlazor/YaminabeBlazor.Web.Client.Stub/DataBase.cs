@@ -28,59 +28,59 @@ namespace YaminabeBlazor.Web.Client.Stub
     /// <revisionHistory>
     ///     <revision date="2020/09/21" version="0.0.1-alfa" author="kzlabo">新規作成。</revision>
     /// </revisionHistory>
-    public static class DataBase
+    public class DataBase
     {
         #region -------------------- property --------------------
 
         /// <summary>
         /// 商品マスタを取得または設定します。
         /// </summary>
-        internal static List<ProductEntityModel> Products { get; set; }
+        internal List<ProductEntityModel> Products { get; set; }
 
         /// <summary>
         /// 商品カテゴリマスタを取得または設定します。
         /// </summary>
-        internal static List<ProductCategoryEntityModel> ProductCategories { get; set; }
+        internal List<ProductCategoryEntityModel> ProductCategories { get; set; }
 
         /// <summary>
         /// ブランドマスタを取得または設定します。
         /// </summary>
-        internal static List<BrandEntityModel> Brands { get; set; }
+        internal List<BrandEntityModel> Brands { get; set; }
 
         /// <summary>
         /// 得意先マスタを取得または設定します。
         /// </summary>
-        internal static List<CustomerEntityModel> Customers { get; set; }
+        internal List<CustomerEntityModel> Customers { get; set; }
 
         /// <summary>
         /// 回収日区分を取得または設定します。
         /// </summary>
-        internal static IReadOnlyList<CollectionDateTypeModel> CollectionDateTypes { get; set; }
+        internal IReadOnlyList<CollectionDateTypeModel> CollectionDateTypes { get; set; }
 
         /// <summary>
         /// 締日区分を取得または設定します。
         /// </summary>
-        internal static IReadOnlyList<CutoffDateTypeModel> CutoffDateTypes { get; set; }
+        internal IReadOnlyList<CutoffDateTypeModel> CutoffDateTypes { get; set; }
 
         /// <summary>
         /// 消費税区分を取得または設定します。
         /// </summary>
-        internal static IReadOnlyList<TaxTypeModel> TaxTypes { get; set; }
+        internal IReadOnlyList<TaxTypeModel> TaxTypes { get; set; }
 
         /// <summary>
         /// 消費税端数処理区分を取得または設定します。
         /// </summary>
-        internal static IReadOnlyList<TaxRoundTypeModel> TaxRoundTypes { get; set; }
+        internal IReadOnlyList<TaxRoundTypeModel> TaxRoundTypes { get; set; }
 
         /// <summary>
         /// 消費税計算区分を取得または設定します。
         /// </summary>
-        internal static IReadOnlyList<TaxCalcTypeModel> TaxCalcTypes { get; set; }
+        internal IReadOnlyList<TaxCalcTypeModel> TaxCalcTypes { get; set; }
 
         /// <summary>
         /// 商品タグ区分を取得または設定します。
         /// </summary>
-        internal static IReadOnlyList<ProductTagTypeModel> ProductTagTypes { get; set; }
+        internal IReadOnlyList<ProductTagTypeModel> ProductTagTypes { get; set; }
 
         #endregion
 
@@ -89,10 +89,10 @@ namespace YaminabeBlazor.Web.Client.Stub
         /// <summary>
         /// <see cref="DataBase"/> クラスの新しいインスタンスを作成します。
         /// </summary>
-        static DataBase()
+        public DataBase()
         {
             // 商品マスタ
-            DataBase.Products = new List<ProductEntityModel>()
+            this.Products = new List<ProductEntityModel>()
             {
                 ProductFactory.Load(
                     productId: "000010010001",
@@ -217,7 +217,7 @@ namespace YaminabeBlazor.Web.Client.Stub
             };
 
             // 商品カテゴリマスタ
-            DataBase.ProductCategories = new List<ProductCategoryEntityModel>()
+            this.ProductCategories = new List<ProductCategoryEntityModel>()
             {
                 ProductCategoryFactory.Load(
                     categoryId: "001",
@@ -240,7 +240,7 @@ namespace YaminabeBlazor.Web.Client.Stub
             };
 
             // ブランドマスタ
-            DataBase.Brands = new List<BrandEntityModel>()
+            this.Brands = new List<BrandEntityModel>()
             {
                 BrandFactory.Load(
                     brandId: "00001",
@@ -266,7 +266,7 @@ namespace YaminabeBlazor.Web.Client.Stub
             };
 
             // 得意先マスタ
-            DataBase.Customers = new List<CustomerEntityModel>()
+            this.Customers = new List<CustomerEntityModel>()
             {
                 CustomerFactory.Load(
                     customerId: "0000000001",
@@ -343,53 +343,22 @@ namespace YaminabeBlazor.Web.Client.Stub
             };
 
             // 回収日区分
-            DataBase.CollectionDateTypes = CollectionDateTypeFactory.CreateInitialData();
+            this.CollectionDateTypes = CollectionDateTypeFactory.CreateInitialData();
 
             // 締日区分
-            DataBase.CutoffDateTypes = CutoffDateTypeFactory.CreateInitialData();
+            this.CutoffDateTypes = CutoffDateTypeFactory.CreateInitialData();
 
             // 消費税区分
-            DataBase.TaxTypes = TaxTypeFactory.CreateInitialData();
+            this.TaxTypes = TaxTypeFactory.CreateInitialData();
 
             // 消費税端数処理区分
-            DataBase.TaxRoundTypes = TaxRoundTypeFactory.CreateInitialData();
+            this.TaxRoundTypes = TaxRoundTypeFactory.CreateInitialData();
 
             // 消費税計算区分
-            DataBase.TaxCalcTypes = TaxCalcTypeFactory.CreateInitialData();
+            this.TaxCalcTypes = TaxCalcTypeFactory.CreateInitialData();
 
             // 商品タグ区分
-            DataBase.ProductTagTypes = ProductTagTypeFactory.CreateInitialData();
-
-            // 1000件越えテスト用
-            for (var i = 0; i < 1000; i++)
-            {
-                DataBase.Products.Add(
-                    ProductFactory.Load(
-                        productId: $"99999999{i:D4}",
-                        productName: $"テスト商品 {i}",
-                        brandId: "99999",
-                        catetoryId: "999",
-                        listPrice: 9999,
-                        productTagType: ProductTagTypeOptions.None,
-                        updateDateTime: DateTime.Now,
-                        updateUserId: "Stub"
-                        )); ;
-            }
-            DataBase.ProductCategories.Add(
-                ProductCategoryFactory.Load(
-                    categoryId: "999",
-                    categoryName: "テストお菓子",
-                    updateDateTime: DateTime.Now,
-                    updateUserId: "Stub"
-                    ));
-            DataBase.Brands.Add(
-                BrandFactory.Load(
-                    brandId: "99999",
-                    brandName: "テストメーカー",
-                    note: "1000件テスト用",
-                    updateDateTime: DateTime.Now,
-                    updateUserId: "Stub"
-                    ));
+            this.ProductTagTypes = ProductTagTypeFactory.CreateInitialData();
         }
 
         #endregion

@@ -35,13 +35,21 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
     /// </revisionHistory>
     public class CustomersApiService : ICustomersApiService
     {
+        #region -------------------- field --------------------
+
+        private DataBase _dataBase;
+
+        #endregion
+
         #region -------------------- constructor --------------------
 
         /// <summary>
         /// <see cref="CustomersApiService"/> クラスの新しいインスタンスを作成します。
         /// </summary>
-        public CustomersApiService()
+        /// <param name="database">データベース。</param>
+        public CustomersApiService(DataBase database)
         {
+            this._dataBase = database;
         }
 
         #endregion
@@ -60,7 +68,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
             {
                 var customers = new List<CustomerInputModel>();
 
-                foreach (var customer in DataBase.Customers)
+                foreach (var customer in this._dataBase.Customers)
                 {
                     customers.Add(new CustomerInputModel()
                     {
@@ -77,17 +85,17 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                         Mail = customer.Mail,
                         Hp = customer.Hp,
                         CutoffDateType = customer.CutoffDateType,
-                        CutoffDateTypeName = DataBase.CutoffDateTypes.First(c => c.CutoffDateType.Equals(customer.CutoffDateType)).CutoffDateTypeName,
+                        CutoffDateTypeName = this._dataBase.CutoffDateTypes.First(c => c.CutoffDateType.Equals(customer.CutoffDateType)).CutoffDateTypeName,
                         CutoffDate = customer.CutoffDate,
                         CollectionDateType = customer.CollectionDateType,
-                        CollectionDateTypeName =  DataBase.CollectionDateTypes.First(c => c.CollectionDateType.Equals(customer.CollectionDateType)).CollectionDateTypeName,
+                        CollectionDateTypeName = this._dataBase.CollectionDateTypes.First(c => c.CollectionDateType.Equals(customer.CollectionDateType)).CollectionDateTypeName,
                         CollectionDate = customer.CollectionDate,
                         TaxType = customer.TaxType,
-                        TaxTypeName = DataBase.TaxTypes.First(t => t.TaxType.Equals(customer.TaxType)).TaxTypeName,
+                        TaxTypeName = this._dataBase.TaxTypes.First(t => t.TaxType.Equals(customer.TaxType)).TaxTypeName,
                         TaxCalcType = customer.TaxCalcType,
-                        TaxCalcTypeName = DataBase.TaxCalcTypes.First(t => t.TaxCalcType.Equals(customer.TaxCalcType)).TaxCalcTypeName,
+                        TaxCalcTypeName = this._dataBase.TaxCalcTypes.First(t => t.TaxCalcType.Equals(customer.TaxCalcType)).TaxCalcTypeName,
                         TaxRoundType = customer.TaxRoundType,
-                        TaxRoundTypeName = DataBase.TaxRoundTypes.First(t => t.TaxRoundType.Equals(customer.TaxRoundType)).TaxRoundTypeName,
+                        TaxRoundTypeName = this._dataBase.TaxRoundTypes.First(t => t.TaxRoundType.Equals(customer.TaxRoundType)).TaxRoundTypeName,
                         Note = customer.Note
                     });
                 }
@@ -113,10 +121,10 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 // 追加
                 foreach (var customer in addedCustomers)
                 {
-                    var addedBrand = DataBase.Customers.FirstOrDefault(c => c.CustomerId.Equals(customer.CustomerId));
+                    var addedBrand = this._dataBase.Customers.FirstOrDefault(c => c.CustomerId.Equals(customer.CustomerId));
                     if (addedBrand == null)
                     {
-                        DataBase.Customers.Add(CustomerFactory.Create(
+                        this._dataBase.Customers.Add(CustomerFactory.Create(
                             customerId: customer.CustomerId,
                             customerName: customer.CustomerName,
                             customerKanaName: customer.CustomerKanaName,
@@ -146,7 +154,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 // 更新
                 foreach (var customer in modifiedCustomers)
                 {
-                    var modifiedCustomer = DataBase.Customers.FirstOrDefault(c => c.CustomerId.Equals(customer.CustomerId));
+                    var modifiedCustomer = this._dataBase.Customers.FirstOrDefault(c => c.CustomerId.Equals(customer.CustomerId));
                     if (modifiedCustomer == null)
                     {
                         continue;
@@ -177,12 +185,12 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 // 削除
                 foreach (var customer in deletedCustomers)
                 {
-                    var deletedCustomer = DataBase.Customers.FirstOrDefault(c => c.CustomerId.Equals(customer.CustomerId));
+                    var deletedCustomer = this._dataBase.Customers.FirstOrDefault(c => c.CustomerId.Equals(customer.CustomerId));
                     if (deletedCustomer == null)
                     {
                         continue;
                     }
-                    DataBase.Customers.Remove(deletedCustomer);
+                    this._dataBase.Customers.Remove(deletedCustomer);
                 }
 
                 return HttpStatusCode.OK;

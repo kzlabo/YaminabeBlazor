@@ -36,13 +36,21 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
     /// </revisionHistory>
     public class ProductsApiService : IProductsApiService
     {
+        #region -------------------- field --------------------
+
+        private DataBase _dataBase;
+
+        #endregion
+
         #region -------------------- constructor --------------------
 
         /// <summary>
         /// <see cref="ProductsApiService"/> クラスの新しいインスタンスを作成します。
         /// </summary>
-        public ProductsApiService()
+        /// <param name="database">データベース。</param>
+        public ProductsApiService(DataBase database)
         {
+            this._dataBase = database;
         }
 
         #endregion
@@ -61,19 +69,19 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
             {
                 var producs = new List<ProductInputModel>();
 
-                foreach(var product in DataBase.Products)
+                foreach(var product in this._dataBase.Products)
                 {
                     producs.Add(new ProductInputModel()
                     {
                         ProductId = product.ProductId,
                         ProductName = product.ProductName,
                         BrandId = product.BrandId,
-                        BrandName = DataBase.Brands.FirstOrDefault(b => b.BrandId.Equals(product.BrandId))?.BrandName,
+                        BrandName = this._dataBase.Brands.FirstOrDefault(b => b.BrandId.Equals(product.BrandId))?.BrandName,
                         CatetoryId = product.CatetoryId,
-                        CategoryName = DataBase.ProductCategories.FirstOrDefault(p => p.CategoryId.Equals(product.CatetoryId))?.CategoryName,
+                        CategoryName = this._dataBase.ProductCategories.FirstOrDefault(p => p.CategoryId.Equals(product.CatetoryId))?.CategoryName,
                         ListPrice = product.ListPrice,
                         ProductTagType = product.ProductTagType,
-                        ProductTagTypeName = string.Join("\r\n", DataBase.ProductTagTypes.Where(p => p.ProductTagType.Equals(ProductTagTypeOptions.None) == false).Where(p => product.ProductTagType.HasFlag(p.ProductTagType)).Select(p => p.ProductTagTypeName).ToArray())
+                        ProductTagTypeName = string.Join("\r\n", this._dataBase.ProductTagTypes.Where(p => p.ProductTagType.Equals(ProductTagTypeOptions.None) == false).Where(p => product.ProductTagType.HasFlag(p.ProductTagType)).Select(p => p.ProductTagTypeName).ToArray())
                     });
                 }
 
@@ -98,10 +106,10 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 // 追加
                 foreach (var product in addedProducts)
                 {
-                    var addedProduct = DataBase.Products.FirstOrDefault(p => p.ProductId.Equals(product.ProductId));
+                    var addedProduct = this._dataBase.Products.FirstOrDefault(p => p.ProductId.Equals(product.ProductId));
                     if (addedProduct == null)
                     {
-                        DataBase.Products.Add(ProductFactory.Create(
+                        this._dataBase.Products.Add(ProductFactory.Create(
                             productId: product.ProductId,
                             productName: product.ProductName,
                             brandId: product.BrandId,
@@ -117,7 +125,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 // 更新
                 foreach (var product in modifiedProducts)
                 {
-                    var modifiedProduct = DataBase.Products.FirstOrDefault(p => p.ProductId.Equals(product.ProductId));
+                    var modifiedProduct = this._dataBase.Products.FirstOrDefault(p => p.ProductId.Equals(product.ProductId));
                     if (modifiedProduct == null)
                     {
                         continue;
@@ -134,12 +142,12 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 // 削除
                 foreach (var product in deletedProducts)
                 {
-                    var deletedProduct = DataBase.Products.FirstOrDefault(p => p.ProductId.Equals(product.ProductId));
+                    var deletedProduct = this._dataBase.Products.FirstOrDefault(p => p.ProductId.Equals(product.ProductId));
                     if (deletedProduct == null)
                     {
                         continue;
                     }
-                    DataBase.Products.Remove(deletedProduct);
+                    this._dataBase.Products.Remove(deletedProduct);
                 }
 
                 return HttpStatusCode.OK;
