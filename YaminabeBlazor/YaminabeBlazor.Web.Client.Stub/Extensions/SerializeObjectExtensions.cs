@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.Json;
 
 namespace YaminabeBlazor.Web.Client.Stub.Extensions
 {
@@ -37,14 +36,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Extensions
         /// </returns>
         public static T DeepCopy<T>(this T original)
         {
-            using (var memoryStream = new MemoryStream())
-            {
-                var formatter = new BinaryFormatter();
-                formatter.Serialize(memoryStream, original);
-                memoryStream.Seek(0, SeekOrigin.Begin);
-
-                return (T)formatter.Deserialize(memoryStream);
-            }
+            return JsonSerializer.Deserialize<T>(JsonSerializer.Serialize(original));
         }
     }
 }
