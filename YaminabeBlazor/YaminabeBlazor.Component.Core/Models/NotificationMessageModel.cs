@@ -24,7 +24,6 @@ namespace YaminabeBlazor.Component.Core.Models
     /// <revisionHistory>
     ///     <revision date="2020/09/21" version="0.0.1-alfa" author="kzlabo">新規作成。</revision>
     /// </revisionHistory>
-    [Serializable]
     public class NotificationMessageModel
     {
         #region -------------------- property --------------------

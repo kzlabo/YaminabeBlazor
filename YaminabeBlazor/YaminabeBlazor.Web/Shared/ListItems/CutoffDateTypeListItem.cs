@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System;
 using YaminabeBlazor.Component.Core.Models;
 using YaminabeBlazor.Web.Shared.Models;
 
@@ -28,7 +27,6 @@ namespace YaminabeBlazor.Web.Shared.ListItems
     /// <revisionHistory>
     ///     <revision date="2020/09/21" version="0.0.1-alfa" author="kzlabo">新規作成。</revision>
     /// </revisionHistory>
-    [Serializable]
     public class CutoffDateTypeListItem : CutoffDateTypeModel, IListItemModel
     {
         #region -------------------- property --------------------

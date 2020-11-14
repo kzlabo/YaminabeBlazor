@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-using System;
-
 namespace YaminabeBlazor.Web.Shared.Models
 {
     /// <summary>
     /// 基底の画面入力モデルを提供します。
     /// </summary>
     /// <seealso cref="YaminabeBlazor.Web.Shared.Models.ViewModelBase" />
-    [Serializable]
     public class InputViewModelBase : ViewModelBase
     {
     }

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System;
 using YaminabeBlazor.Core.Enums;
 using YaminabeBlazor.Core.Models;
 
@@ -27,7 +26,6 @@ namespace YaminabeBlazor.Web.Shared.Models
     /// <revisionHistory>
     ///     <revision date="2020/09/21" version="0.0.1-alfa" author="kzlabo">新規作成。</revision>
     /// </revisionHistory>
-    [Serializable]
     public class TaxCalcTypeModel : ITaxCalcTypeModel
     {
         #region -------------------- property --------------------
