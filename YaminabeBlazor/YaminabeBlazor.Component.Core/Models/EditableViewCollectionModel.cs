@@ -73,7 +73,7 @@ namespace YaminabeBlazor.Component.Core.Models
         /// <summary>
         /// 一時入力アイテム数を取得または設定します。
         /// </summary>
-        public int TemporarySize { get; set; } = 10;
+        public int TemporarySize { get; set; } = 50;
 
         /// <summary>
         /// フィルタ条件リストを取得または設定します。
@@ -400,6 +400,7 @@ namespace YaminabeBlazor.Component.Core.Models
             {
                 var item = (TItem)Activator.CreateInstance(typeof(TItem));
                 item.EditState = EditStateOptions.Added;
+                item.EditMode = EditModeOptions.Edit;
                 item.StateHasChanged += this.StateHasChanged;
                 item.ItemRemoved += this.TemporaryItemRemoved;
 

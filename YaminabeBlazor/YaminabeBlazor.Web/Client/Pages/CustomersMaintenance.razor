@@ -106,7 +106,7 @@
             </EditableGridDataRow>
         </TableHeader>
         <RowTemplate Context="customer">
-            <EditableGridDataRow @key="customer.UniqueId">
+            <EditableGridDataRow>
                 @* ItemCommand *@
                 <td class="middle center">
                     <EditableItemEditButtonComponent Item="@customer" class="button is-small" />
@@ -153,7 +153,7 @@
             </EditableGridDataRow>
         </RowTemplate>
         <EditTemplate Context="customer">
-            <EditableGridDataRow @key="customer.UniqueId">
+            <EditableGridDataRow>
                 <td colspan="11">
                     <div style="padding:0.75rem;">
                         <EditForm Model="@customer">

@@ -34,19 +34,21 @@
             <tbody>
                 @foreach (var item in Items.ViewItems)
                 {
-                    if (item.EditMode == EditModeOptions.Edit)
-                    {
-                        var rowClass = GetRowClass(item);
-                        <CascadingValue Value="item" Name="CascadeItem" TValue="TItem">
-                            <CascadingValue Value="rowClass" Name="RowClass">
-                                @EditTemplate(item)
+                    <ItemContainer TItem="TItem" Item="item">
+                        @if (item.EditMode == EditModeOptions.Edit)
+                        {
+                            var rowClass = GetRowClass(item);
+                            <CascadingValue Value="item" Name="CascadeItem" TValue="TItem">
+                                <CascadingValue Value="rowClass" Name="RowClass">
+                                    @EditTemplate(item)
+                                </CascadingValue>
                             </CascadingValue>
-                        </CascadingValue>
-                    }
-                    else
-                    {
-                        @RowTemplate(item);
-                    }
+                        }
+                        else
+                        {
+                            @RowTemplate(item);
+                        }
+                    </ItemContainer>
                 }
             </tbody>
         </CascadingValue>

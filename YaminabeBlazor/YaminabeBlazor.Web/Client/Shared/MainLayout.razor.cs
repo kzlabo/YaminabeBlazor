@@ -125,7 +125,7 @@ namespace YaminabeBlazor.Web.Client.Shared
         /// </summary>
         public void OnMenuClick()
         {
-            this.IsSidebarOpend = false;
+            //this.IsSidebarOpend = false;
         }
 
         /// <summary>

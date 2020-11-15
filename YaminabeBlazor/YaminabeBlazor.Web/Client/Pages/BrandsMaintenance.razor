@@ -85,7 +85,7 @@
             </EditableGridDataRow>
         </TableHeader>
         <RowTemplate Context="brand">
-            <EditableGridDataRow @key="brand.UniqueId">
+            <EditableGridDataRow>
                 @* ItemCommand *@
                 <td class="middle center">
                     <EditableItemEditButtonComponent Item="@brand" />
@@ -108,7 +108,7 @@
             </EditableGridDataRow>
         </RowTemplate>
         <EditTemplate Context="brand">
-            <EditableGridDataRow @key="brand.UniqueId">
+            <EditableGridDataRow>
                 @* ItemCommand *@
                 <td class="middle center">
                     <EditableItemEditButtonComponent Item="@brand" />
