@@ -33,137 +33,73 @@
         command area
         --------------------------------------------------
     *@
-    <div>
-        <p>
-            <button @onclick="OnSearchClick" type="button">@WordResource.Search</button>
-            <button @onclick="OnPutClick" type="button">@WordResource.Commit</button>
-            <button @onclick="OnHelpClick" type="button">@WordResource.Help</button>
-        </p>
+    <div class="yn-command">
+        <button @onclick="OnSearchClick" type="button" class="yn-button">@WordResource.Search</button>
+        <button @onclick="OnPutClick" type="button" class="yn-button">@WordResource.Commit</button>
+        <button @onclick="OnHelpClick" type="button" class="yn-button">@WordResource.Help</button>
     </div>
 
-    @*
-        --------------------------------------------------
-        grid command area
-        --------------------------------------------------
-    *@
-    <div>
-        <EditableItemAddButtonComponent TItem="ProductInputModel" Items="Products" />
-        <button @onclick="OnSortClick" type="button">@WordResource.Sort</button>
+    <div class="list-table is-slim is-color-patterned">
+        <ynRepeater TItem="ProductInputModel"
+                    Items="@Products"
+                    PagingType="PagingTypeOptions.None"
+                    IsVirtualize="true"
+                    @ref="MasterRepeater">
+            <Header>
+                <div class="row is-head is-hidden-mobile">
+                    <div class="column" style="flex-basis:100px;"></div>
+                    <ynHeaderTag PropertyName="@nameof(ProductInputModel.ProductId)" class="middle center" style="flex-basis:150px;" />
+                    <ynHeaderTag PropertyName="@nameof(ProductInputModel.ProductName)" class="middle center" style="flex-basis:200px;flex-grow:1;" />
+                    <ynHeaderTag PropertyName="@nameof(ProductInputModel.BrandName)" class="middle center" style="flex-basis:180px;" />
+                    <ynHeaderTag PropertyName="@nameof(ProductInputModel.CategoryName)" class="middle center" style="flex-basis:180px;" />
+                    <ynHeaderTag PropertyName="@nameof(ProductInputModel.ListPrice)" class="middle center" style="flex-basis:120px;" />
+                    <ynHeaderTag PropertyName="@nameof(ProductInputModel.ProductTagTypeName)" class="middle center" style="flex-basis:120px;" />
+                </div>
+                <div class="row is-head is-hidden-mobile">
+                    <div class="column" style="flex-basis:100px;"></div>
+                    <div class="column middle center" style="flex-basis:150px;"><ynFilterInputText PropertyName="@nameof(ProductInputModel.ProductId)" /></div>
+                    <div class="column middle center" style="flex-basis:200px;flex-grow:1;"><ynFilterInputText PropertyName="@nameof(ProductInputModel.ProductName)" /></div>
+                    <div class="column middle center" style="flex-basis:180px;"><ynFilterInputText PropertyName="@nameof(ProductInputModel.BrandName)" /></div>
+                    <div class="column middle center" style="flex-basis:180px;"><ynFilterInputText PropertyName="@nameof(ProductInputModel.CategoryName)" /></div>
+                    <div class="column middle center" style="flex-basis:120px;"><ynFilterInputText PropertyName="@nameof(ProductInputModel.ListPrice)" /></div>
+                    <div class="column middle center" style="flex-basis:120px;"><ynFilterInputText PropertyName="@nameof(ProductInputModel.ProductTagTypeName)" /></div>
+                </div>
+            </Header>
+            <RowTemplate>
+                <div class="row">
+                    <div class="column middle center" style="flex-basis:100px;flex-grow:0;">
+                        <ynEditableSwitch class="yn-button-flat yn-none-w yn-none-h" style="width:40px;" />
+                        <ynEditableDelete class="yn-button-flat yn-none-w yn-none-h" style="width:40px;" />
+                    </div>
+                    <div class="column middle" style="flex-basis:150px;">
+                        <ynInputText PropertyName="@nameof(ProductInputModel.ProductId)" />
+                    </div>
+                    <div class="column middle" style="flex-basis:200px;flex-grow:1;">
+                        <ynInputText PropertyName="@nameof(ProductInputModel.ProductName)" />
+                    </div>
+                    <div class="column middle" style="flex-basis:180px;">
+                        <div style="display:flex;align-items:center;width:100%;">
+                            <div style="width: calc(100% - 3.0rem);">
+                                <ynInputSelect TValue="string" TList="BrandListItem" ListItems="BrandList" ValueName="@nameof(ProductInputModel.BrandId)" TextName="@nameof(ProductInputModel.BrandName)" />
+                            </div>
+                            <div style="width: 3.0rem;">
+                                <ynEditableButton @onclick="()=> { OnBrandSelectClick(context); }" class="yn-button-flat yn-fit-w yn-none-h">@WordResource.Select</ynEditableButton>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column middle" style="flex-basis:180px;">
+                        <ynInputSelect TValue="string" TList="ProductCategoryListItem" ListItems="ProductCategoryList" ValueName="@nameof(ProductInputModel.CatetoryId)" TextName="@nameof(ProductInputModel.CategoryName)" />
+                    </div>
+                    <div class="column middle right" style="flex-basis:120px;">
+                        <ynInputNumber TValue="decimal" PropertyName="@nameof(ProductInputModel.ListPrice)" Format="0.00" />
+                    </div>
+                    <div class="column middle" style="flex-basis:120px;">
+                        <ynInputCheckBoxList TValue="ProductTagTypeOptions" TList="ProductTagTypeListItem" ListItems="ProductTagTypeList" ValueName="@nameof(ProductInputModel.ProductTagType)" TextName="@nameof(ProductInputModel.ProductTagTypeName)" style="display:flex; flex-direction:column;" />
+                    </div>
+                </div>
+            </RowTemplate>
+        </ynRepeater>
     </div>
-    @*
-        --------------------------------------------------
-        grid item area
-        --------------------------------------------------
-    *@
-    <EditableRepeaterComponent TItem="ProductInputModel"
-                               Items="@Products"
-                               EditItemClass="is-selected"
-                               DeletedItemClass="is-deleted"
-                               class="list-table is-slim is-color-patterned">
-        <HeaderTemplate>
-            <EditableGridDataRow RowTag="div" class="row is-head is-hidden-mobile">
-                <div class="column" style="flex-basis:100px;"></div>
-                <div class="column middle center" style="flex-basis:150px;">@($"{WordResource.Product}{WordResource.Code}")</div>
-                <div class="column middle center" style="flex-basis:200px;flex-grow:1;">@($"{WordResource.Product}{WordResource.Name}")</div>
-                <div class="column middle center" style="flex-basis:180px;">@($"{WordResource.Brand}{WordResource.Code}")</div>
-                <div class="column middle center" style="flex-basis:180px;">@($"{WordResource.Category}{WordResource.Code}")</div>
-                <div class="column middle center" style="flex-basis:120px;">@($"{WordResource.ListPrice}")</div>
-                <div class="column middle center" style="flex-basis:120px;">@($"{WordResource.ProductTag}")</div>
-            </EditableGridDataRow>
-            <EditableGridDataRow RowTag="div" class="row is-head is-hidden-mobile">
-                <div class="column" style="flex-basis:100px;"></div>
-                <div class="column middle center" style="flex-basis:150px;"><FilterConditionComponent PropertyName="@nameof(ProductInputModel.ProductId)" /></div>
-                <div class="column middle center" style="flex-basis:200px;flex-grow:1;"><FilterConditionComponent PropertyName="@nameof(ProductInputModel.ProductName)" /></div>
-                <div class="column middle center" style="flex-basis:180px;"><FilterConditionComponent PropertyName="@nameof(ProductInputModel.BrandName)" /></div>
-                <div class="column middle center" style="flex-basis:180px;"><FilterConditionComponent PropertyName="@nameof(ProductInputModel.CategoryName)" /></div>
-                <div class="column middle center" style="flex-basis:120px;"><FilterConditionComponent PropertyName="@nameof(ProductInputModel.ListPrice)" /></div>
-                <div class="column middle center" style="flex-basis:120px;"><FilterConditionComponent PropertyName="@nameof(ProductInputModel.ProductTagTypeName)" /></div>
-            </EditableGridDataRow>
-        </HeaderTemplate>
-        <RowTemplate Context="product">
-            <EditableGridDataRow RowTag="div" class="row">
-                @* ItemCommand *@
-                <div class="column middle center" style="flex-basis:100px;">
-                    <EditableItemEditButtonComponent Item="@product" class="button is-small" />
-                    <EditableItemDeleteButtonComponent Item="@product" class="button is-small" />
-                </div>
-                @* ProductCode *@
-                <div class="column middle" style="flex-basis:150px;">
-                    <EditableTextLabelColumnComponent Item="@product" PropertyName="@nameof(product.ProductId)" />
-                </div>
-                @* ProductName *@
-                <div class="column middle" style="flex-basis:200px;flex-grow:1;">
-                    <EditableTextLabelColumnComponent Item="@product" PropertyName="@nameof(product.ProductName)" />
-                </div>
-                @* BrandName *@
-                <div class="column middle" style="flex-basis:180px;">
-                    <EditableTextLabelColumnComponent Item="@product" PropertyName="@nameof(product.BrandName)" />
-                </div>
-                @* CategoryName *@
-                <div class="column middle" style="flex-basis:180px;">
-                    <EditableTextLabelColumnComponent Item="@product" PropertyName="@nameof(product.CategoryName)" />
-                </div>
-                @* ListPrice *@
-                <div class="column middle right" style="flex-basis:120px;">
-                    <EditableTextLabelColumnComponent Item="@product" PropertyName="@nameof(product.ListPrice)" Format="0.00" />
-                </div>
-                @* ProductTagTypeName *@
-                <div class="column middle" style="flex-basis:120px;">
-                    <EditableTextLabelColumnComponent Item="@product" PropertyName="@nameof(product.ProductTagTypeName)" />
-                </div>
-            </EditableGridDataRow>
-        </RowTemplate>
-        <EditTemplate Context="product">
-            <EditableGridDataRow RowTag="div" class="row">
-                @* ItemCommand *@
-                <div class="column middle center" style="flex-basis:100px;flex-grow:0;">
-                    <EditableItemEditButtonComponent Item="@product" />
-                    <EditableItemDeleteButtonComponent Item="@product" />
-                </div>
-                @* ProductCode *@
-                <div class="column middle" style="flex-basis:150px;">
-                    <EditableTextControlComponent @bind-Value="product.ProductId" EditableState="EditStateOptions.Added" />
-                </div>
-                @* ProductName *@
-                <div class="column middle" style="flex-basis:200px;flex-grow:1;">
-                    <EditableTextControlComponent @bind-Value="product.ProductName" />
-                </div>
-                @* BrandCode *@
-                <div class="column middle" style="flex-basis:180px;">
-                    <EditableSelectControlComponent TValue="string"
-                                                    TDropModel="BrandListItem"
-                                                    DropItems="BrandList"
-                                                    SelectedCallBack="product.SetBrand"
-                                                    @bind-Value="product.BrandId" />
-                    <EditableButtonComponent @onclick="OnBrandSelectClick">@WordResource.Search</EditableButtonComponent>
-                </div>
-                @* CategoryCode *@
-                <div class="column middle" style="flex-basis:180px;">
-                    <EditableSelectControlComponent TValue="string"
-                                                    TDropModel="ProductCategoryListItem"
-                                                    DropItems="ProductCategoryList"
-                                                    SelectedCallBack="product.SetCategory"
-                                                    @bind-Value="product.CatetoryId" />
-                </div>
-                @* ListPrice *@
-                <div class="column middle right" style="flex-basis:120px;">
-                    <EditableNumberControlComponent Format="0.00" @bind-Value="product.ListPrice" class="right" />
-                </div>
-                @* ProductTagType *@
-                <div class="column middle" style="flex-basis:120px;">
-                    <EditableCheckBoxListControlComponent TValue="ProductTagTypeOptions"
-                                                          TCheckModel="ProductTagTypeListItem"
-                                                          DropItems="ProductTagTypeList"
-                                                          CheckedCallBack="product.SetProductTagType"
-                                                          @bind-Value="product.ProductTagType"
-                                                          style="display:flex; flex-direction:column;" />
-                </div>
-            </EditableGridDataRow>
-        </EditTemplate>
-    </EditableRepeaterComponent>
-    <EditableScrollPagingComponent TItem="ProductInputModel" Items="@Products" PageRowSize="5">
-        @WordResource.PagingText
-    </EditableScrollPagingComponent>
 </div>
 
 @*
@@ -171,48 +107,7 @@
     option content
     --------------------------------------------------
 *@
-<LayerManagerComponent @ref="LayerManager" class="optionbar">
-    @* SortOption *@
-    <SortOptionBarComponent TItem="ProductInputModel" Items="@Products" Name="SortOption" class="optionbar-content">
-        <SortConditionComponent PropertyName="@nameof(ProductInputModel.ProductId)" DisplayName="@($"{WordResource.Product}{WordResource.Code}")" />
-        <SortConditionComponent PropertyName="@nameof(ProductInputModel.ProductName)" DisplayName="@($"{WordResource.Product}{WordResource.Name}")" />
-        <SortConditionComponent PropertyName="@nameof(ProductInputModel.BrandId)" DisplayName="@($"{WordResource.Brand}{WordResource.Code}")" />
-        <SortConditionComponent PropertyName="@nameof(ProductInputModel.BrandName)" DisplayName="@($"{WordResource.Brand}{WordResource.Name}")" />
-        <SortConditionComponent PropertyName="@nameof(ProductInputModel.CatetoryId)" DisplayName="@($"{WordResource.Category}{WordResource.Code}")" />
-        <SortConditionComponent PropertyName="@nameof(ProductInputModel.CategoryName)" DisplayName="@($"{WordResource.Category}{WordResource.Name}")" />
-        <SortConditionComponent PropertyName="@nameof(ProductInputModel.ListPrice)" DisplayName="@($"{WordResource.ListPrice}")" />
-        <SortConditionComponent PropertyName="@nameof(ProductInputModel.ProductTagType)" DisplayName="@($"{WordResource.ProductTag}")" />
-    </SortOptionBarComponent>
-    @* BrandSelectorOption *@
-    <TemplateLayerComponent Name="BrandSelectorOption" class="optionbar-content">
-        <ListItemSelectorComponent TListItem="BrandListItem"
-                                   ListItems="BrandList"
-                                   class="table is-bordered is-hoverable is-slim is-color-patterned"
-                                   style="width:100%; table-layout:fixed; word-break: break-all;">
-            <TableColgroup>
-                <col style="width:30%;" />
-                <col style="width:70%;" />
-            </TableColgroup>
-            <TableHeader>
-                <EditableGridDataRow>
-                    <th class="middle center">@($"{WordResource.Code}")</th>
-                    <th class="middle center">@($"{WordResource.Name}")</th>
-                </EditableGridDataRow>
-                <EditableGridDataRow>
-                    <th><FilterConditionComponent PropertyName="@nameof(BrandListItem.Key)" /></th>
-                    <th><FilterConditionComponent PropertyName="@nameof(BrandListItem.Value)" /></th>
-                </EditableGridDataRow>
-            </TableHeader>
-            <RowTemplate Context="item">
-                <EditableGridDataRow>
-                    <td class="middle center"><button @onclick="(() => SetBrand(item))" type="button">@item.Key</button></td>
-                    <td class="middle">@item.Value</td>
-                </EditableGridDataRow>
-            </RowTemplate>
-        </ListItemSelectorComponent>
-    </TemplateLayerComponent>
-    @* HelpOption *@
-    <TemplateLayerComponent Name="HelpOption" class="optionbar-content">
-        マスタメンテナンス画面のサンプル。
-    </TemplateLayerComponent>
-</LayerManagerComponent>
+<ynLayer class="optionbar">
+    <ProductsMaintenanceHelp @ref="HelpPanel" />
+    <BrandSelector @ref="BrandSelectorPanel" BrandList="@BrandList" />
+</ynLayer>

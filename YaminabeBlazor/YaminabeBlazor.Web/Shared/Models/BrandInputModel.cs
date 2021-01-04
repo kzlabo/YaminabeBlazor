@@ -86,7 +86,7 @@ namespace YaminabeBlazor.Web.Shared.Models
         ///     </item>
         /// </list>
         /// </remarks>
-        [Display(Name = "ブランド名")]
+        [Display(Name = "メモ")]
         [StringLength(500, ErrorMessageResourceName = "StringLength", ErrorMessageResourceType = typeof(MessageResource))]
         public string Note { get; set; }
 

@@ -18,8 +18,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using YaminabeBlazor.Component.Core.Extensions;
 using YaminabeBlazor.Component.Services;
+using YaminabeBlazor.Web.Shared.Dtos;
 using YaminabeBlazor.Web.Shared.Models;
 using YaminabeBlazor.Web.Shared.Services;
 
@@ -56,24 +56,27 @@ namespace YaminabeBlazor.Web.Client.Services
 
         #region -------------------- method --------------------
 
-        /// <summary>
-        /// ブランドマスタリストを取得します。
-        /// </summary>
-        /// <returns>
-        /// ブランドマスタリストを返却します。
-        /// </returns>
+        /// <inheritdoc/>
         public async Task<(HttpStatusCode HttpStatusCode, List<BrandInputModel> Brands)> Get()
         {
             return await this.GetMethod<List<BrandInputModel>>("api/Brands");
         }
 
-        /// <summary>
-        /// ブランドマスタリストを更新します。
-        /// </summary>
-        /// <param name="input">商品マスタリストの更新対象。</param>
-        public async Task<HttpStatusCode> Put(IEnumerable<BrandInputModel> input)
+        /// <inheritdoc/>
+        public async Task<HttpStatusCode> Put(
+            IEnumerable<BrandInputModel> addedItems,
+            IEnumerable<BrandInputModel> changedItems,
+            IEnumerable<BrandInputModel> deletedItems
+            )
         {
-            return await this.PutMethod<IEnumerable<BrandInputModel>>("api/Brands", input.GetPutTarget());
+            return await this.PutMethod(
+                "api/Brands",
+                new ItemsPutDto<BrandInputModel>()
+                {
+                    AddedItems = addedItems,
+                    ChangedItems = changedItems,
+                    DeletedItems = deletedItems
+                });
         }
 
         #endregion

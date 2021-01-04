@@ -15,10 +15,13 @@
  */
 
 using Microsoft.AspNetCore.Components;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using YaminabeBlazor.Component;
 using YaminabeBlazor.Component.Core.Extensions;
 using YaminabeBlazor.Component.Core.Models;
 using YaminabeBlazor.Component.Extensions;
+using YaminabeBlazor.Web.Client.Helps;
 using YaminabeBlazor.Web.Shared.Models;
 using YaminabeBlazor.Web.Shared.Resources;
 using YaminabeBlazor.Web.Shared.Services;
@@ -43,9 +46,53 @@ namespace YaminabeBlazor.Web.Client.Pages
         private IBrandsApiService BrandsWebApi { get; set; }
 
         /// <summary>
+        /// ブランドマスタ編集グリッドを取得または設定します。
+        /// </summary>
+        private ynGridView<BrandInputModel> BrandGridView { get; set; }
+
+        /// <summary>
+        /// ヘルプレイヤーを取得または設定します。
+        /// </summary>
+        private BrandsMaintenanceHelp HelpPanel { get; set; }
+
+        /// <summary>
         /// ブランドマスタリストを取得または設定します。
         /// </summary>
-        public EditableViewCollectionModel<BrandInputModel> Brands { get; set; } = new EditableViewCollectionModel<BrandInputModel>();
+        public List<BrandInputModel> Brands { get; set; } = new List<BrandInputModel>();
+
+        /// <summary>
+        /// 追加対象ブランドマスタリストを取得します。
+        /// </summary>
+        public IEnumerable<BrandInputModel> AddedBrands
+        {
+            get
+            {
+                return this.BrandGridView.AddedItems;
+            }
+        }
+
+        /// <summary>
+        /// 更新対象ブランドマスタリストを取得します。
+        /// </summary>
+        public IEnumerable<BrandInputModel> ChangedBrands
+        {
+            get
+            {
+                return this.BrandGridView.ChangedItems;
+            }
+        }
+
+        /// <summary>
+        /// 削除対象ブランドマスタリストを取得します。
+        /// </summary>
+
+        public IEnumerable<BrandInputModel> DeletedBrands
+        {
+            get
+            {
+                return this.BrandGridView.DeletedItems;
+            }
+        }
 
         #endregion
 
@@ -76,7 +123,7 @@ namespace YaminabeBlazor.Web.Client.Pages
             {
                 return;
             }
-            this.Brands.Load(result.Brands);
+            this.Brands = result.Brands;
         }
 
         /// <summary>
@@ -84,7 +131,7 @@ namespace YaminabeBlazor.Web.Client.Pages
         /// </summary>
         private async Task PutBrands()
         {
-            var putResut = await this.BrandsWebApi.Put(this.Brands);
+            var putResut = await this.BrandsWebApi.Put(this.AddedBrands, this.ChangedBrands, this.DeletedBrands);
             if(putResut.IsSuccessStatusCode() == false)
             {
                 return;
@@ -105,6 +152,8 @@ namespace YaminabeBlazor.Web.Client.Pages
         /// </summary>
         private async Task OnSearchClick()
         {
+            this.Brands = null;
+
             await this.SearchBrands();
         }
 
@@ -132,19 +181,11 @@ namespace YaminabeBlazor.Web.Client.Pages
         }
 
         /// <summary>
-        /// 並び替えボタン押下時の処理を行います。
-        /// </summary>
-        private void OnSortClick()
-        {
-            this.LayerManager.Show("SortOption");
-        }
-
-        /// <summary>
         /// ヘルプボタン押下時の処理を行います。
         /// </summary>
         private void OnHelpClick()
         {
-            this.LayerManager.Show("HelpOption");
+            this.HelpPanel.Show();
         }
 
         #endregion

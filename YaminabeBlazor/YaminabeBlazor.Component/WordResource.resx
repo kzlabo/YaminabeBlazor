@@ -117,20 +117,29 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddGridMode" xml:space="preserve">
+    <value>追加入力</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>閉じる</value>
   </data>
-  <data name="ItemsAddInput" xml:space="preserve">
-    <value>追加入力</value>
+  <data name="Complete" xml:space="preserve">
+    <value>完了</value>
   </data>
-  <data name="ItemsCompleteInput" xml:space="preserve">
-    <value>追加確定</value>
+  <data name="Delete" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>編集</value>
+  </data>
+  <data name="EditGridMode" xml:space="preserve">
+    <value>編集入力</value>
   </data>
   <data name="PagenationNext" xml:space="preserve">
-    <value>次へ</value>
+    <value>&gt;&gt;</value>
   </data>
   <data name="PagenationPrevious" xml:space="preserve">
-    <value>前へ</value>
+    <value>&lt;&lt;</value>
   </data>
   <data name="SortOff" xml:space="preserve">
     <value>ソート解除</value>

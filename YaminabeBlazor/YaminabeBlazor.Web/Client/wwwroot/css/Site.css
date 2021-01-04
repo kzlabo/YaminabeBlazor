@@ -31,6 +31,12 @@ h1, h2, h3, h4, h5, h6 {
 p {
   margin: 0 0 0 0; }
 
+input, select, button {
+  font-family: inherit;
+  font-size: inherit;
+  box-sizing: border-box;
+  padding: 0 0 0 0; }
+
 .navbar {
   display: flex;
   background-color: #000000;
@@ -168,7 +174,7 @@ p {
       width: 100%; }
   .main .optionbar {
     position: absolute;
-    top: 0;
+    top: 1px;
     left: calc(100% - 400px);
     width: 400px;
     height: 100%;
@@ -188,7 +194,7 @@ p {
       padding: 0 0 0 0;
       padding: 0.75rem 0.75rem 0.75rem 0.75rem;
       margin: 0 0 0 0;
-      background: #cccccc; }
+      background: #ffffff; }
       .main .optionbar .optionbar-content.none {
         display: none; }
     .main .optionbar.close {
@@ -282,6 +288,9 @@ p {
   .table th textarea {
     width: calc(100% - 4px);
     box-sizing: border-box; }
+  .table td select, .table th select {
+    width: calc(100% - 4px);
+    box-sizing: border-box; }
   .table.is-bordered td, .table.is-bordered th {
     border: 1px solid #cccccc; }
 
@@ -314,6 +323,10 @@ p {
 .list-table input[type=password],
 .list-table input[type=date],
 .list-table textarea {
+  width: calc(100% - 4px);
+  box-sizing: border-box; }
+
+.list-table select {
   width: calc(100% - 4px);
   box-sizing: border-box; }
 

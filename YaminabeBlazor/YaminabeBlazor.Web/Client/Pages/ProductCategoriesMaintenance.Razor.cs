@@ -15,10 +15,13 @@
  */
 
 using Microsoft.AspNetCore.Components;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using YaminabeBlazor.Component;
 using YaminabeBlazor.Component.Core.Extensions;
 using YaminabeBlazor.Component.Core.Models;
 using YaminabeBlazor.Component.Extensions;
+using YaminabeBlazor.Web.Client.Helps;
 using YaminabeBlazor.Web.Shared.Models;
 using YaminabeBlazor.Web.Shared.Resources;
 using YaminabeBlazor.Web.Shared.Services;
@@ -43,9 +46,53 @@ namespace YaminabeBlazor.Web.Client.Pages
         private IProductCategoriesApiService ProductCategoriesWebApi { get; set; }
 
         /// <summary>
+        /// 商品カテゴリマスタ編集グリッドを取得または設定します。
+        /// </summary>
+        private ynGridView<ProductCategoryInputModel> ProductCategoryGridView { get; set; }
+
+        /// <summary>
+        /// ヘルプレイヤーを取得または設定します。
+        /// </summary>
+        private ProductCategoriesMaintenanceHelp HelpPanel { get; set; }
+
+        /// <summary>
         /// 商品カテゴリマスタリストを取得または設定します。
         /// </summary>
-        public EditableViewCollectionModel<ProductCategoryInputModel> ProductCategories { get; set; } = new EditableViewCollectionModel<ProductCategoryInputModel>();
+        public List<ProductCategoryInputModel> ProductCategories { get; set; } = new List<ProductCategoryInputModel>();
+
+        /// <summary>
+        /// 追加対象商品カテゴリマスタリストを取得します。
+        /// </summary>
+        public IEnumerable<ProductCategoryInputModel> AddedProductCategories
+        {
+            get
+            {
+                return this.ProductCategoryGridView.AddedItems;
+            }
+        }
+
+        /// <summary>
+        /// 更新対象商品カテゴリマスタリストを取得します。
+        /// </summary>
+        public IEnumerable<ProductCategoryInputModel> ChangedProductCategories
+        {
+            get
+            {
+                return this.ProductCategoryGridView.ChangedItems;
+            }
+        }
+
+        /// <summary>
+        /// 削除対象商品カテゴリマスタリストを取得します。
+        /// </summary>
+
+        public IEnumerable<ProductCategoryInputModel> DeletedProductCategories
+        {
+            get
+            {
+                return this.ProductCategoryGridView.DeletedItems;
+            }
+        }
 
         #endregion
 
@@ -76,7 +123,7 @@ namespace YaminabeBlazor.Web.Client.Pages
             {
                 return;
             }
-            this.ProductCategories.Load(result.ProductCategories);
+            this.ProductCategories = result.ProductCategories;
         }
 
         /// <summary>
@@ -84,7 +131,7 @@ namespace YaminabeBlazor.Web.Client.Pages
         /// </summary>
         private async Task PutProductCategories()
         {
-            var putResut = await this.ProductCategoriesWebApi.Put(this.ProductCategories);
+            var putResut = await this.ProductCategoriesWebApi.Put(this.AddedProductCategories, this.ChangedProductCategories, this.DeletedProductCategories);
             if (putResut.IsSuccessStatusCode() == false)
             {
                 return;
@@ -105,6 +152,8 @@ namespace YaminabeBlazor.Web.Client.Pages
         /// </summary>
         private async Task OnSearchClick()
         {
+            this.ProductCategories = null;
+
             await this.SearchProductCategories();
         }
 
@@ -132,19 +181,11 @@ namespace YaminabeBlazor.Web.Client.Pages
         }
 
         /// <summary>
-        /// 並び替えボタン押下時の処理を行います。
-        /// </summary>
-        private void OnSortClick()
-        {
-            this.LayerManager.Show("SortOption");
-        }
-
-        /// <summary>
         /// ヘルプボタン押下時の処理を行います。
         /// </summary>
         private void OnHelpClick()
         {
-            this.LayerManager.Show("HelpOption");
+            this.HelpPanel.Show();
         }
 
         #endregion

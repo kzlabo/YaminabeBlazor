@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YaminabeBlazor.Web.Client.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YaminabeBlazor.Core", "YaminabeBlazor.Core\YaminabeBlazor.Core.csproj", "{3DD4A3FF-A8E1-4EEA-AF41-65E4CE6E689B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YaminabeBlazor.Component.Core", "YaminabeBlazor.Component.Core\YaminabeBlazor.Component.Core.csproj", "{4B0685CD-B286-4AF2-8E97-25DE7E1DFDAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YaminabeBlazor.Component.Core", "YaminabeBlazor.Component.Core\YaminabeBlazor.Component.Core.csproj", "{4B0685CD-B286-4AF2-8E97-25DE7E1DFDAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

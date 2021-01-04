@@ -33,93 +33,63 @@
         command area
         --------------------------------------------------
     *@
-    <div>
-        <p>
-            <button @onclick="OnSearchClick" type="button">@WordResource.Search</button>
-            <button @onclick="OnPutClick" type="button">@WordResource.Commit</button>
-            <button @onclick="OnHelpClick" type="button">@WordResource.Help</button>
-        </p>
+    <div class="yn-command">
+        <button @onclick="OnSearchClick" type="button" class="yn-button">@WordResource.Search</button>
+        <button @onclick="OnPutClick" type="button" class="yn-button">@WordResource.Commit</button>
+        <button @onclick="OnHelpClick" type="button" class="yn-button">@WordResource.Help</button>
     </div>
 
-    @*
-        --------------------------------------------------
-        grid command area
-        --------------------------------------------------
-    *@
-    <div>
-        <EditableItemAddButtonComponent TItem="ProductCategoryInputModel" Items="ProductCategories" />
-        <button @onclick="OnSortClick" type="button">@WordResource.Sort</button>
-    </div>
     @*
         --------------------------------------------------
         grid item area
         --------------------------------------------------
     *@
-    <EditableGridComponent TItem="ProductCategoryInputModel"
-                           Items="@ProductCategories"
-                           EditRowClass="is-selected"
-                           DeletedRowClass="is-deleted"
-                           class="table is-bordered is-slim is-color-patterned"
-                           style="width:100%; min-width:670px; table-layout:fixed; word-break: break-all;">
-        <TableColgroup>
-            <col style="width:60px;" />
-            <col style="width:60px;" />
-            <col style="width:150px;" />
-            <col style="width:calc(100% - 270px); min-width: 400px;" />
-        </TableColgroup>
-        <TableHeader>
-            <EditableGridDataRow>
+    <ynGridView TItem="ProductCategoryInputModel"
+                Items="@ProductCategories"
+                PagingType="PagingTypeOptions.None"
+                IsVirtualize="true"
+                @ref="ProductCategoryGridView"
+                class="table is-bordered is-slim is-color-patterned"
+                style="width:100%; min-width:670px; table-layout:fixed; word-break: break-all;">
+        <Colgroups>
+            <colgroup>
+                <col style="width:60px;" />
+                <col style="width:60px;" />
+                <col style="width:150px;" />
+                <col style="width:calc(100% - 270px); min-width: 400px;" />
+            </colgroup>
+        </Colgroups>
+        <Header>
+            <tr>
                 <th></th>
                 <th></th>
-                <th class="middle center">@($"{WordResource.Category}{WordResource.Code}")</th>
-                <th class="middle center">@($"{WordResource.Category}{WordResource.Name}")</th>
-            </EditableGridDataRow>
-            <EditableGridDataRow>
+                <ynTh PropertyName="@nameof(ProductCategoryInputModel.CategoryId)" class="middle center" />
+                <ynTh PropertyName="@nameof(ProductCategoryInputModel.CategoryName)" class="middle center" />
+            </tr>
+            <tr>
                 <th></th>
                 <th></th>
-                <th><FilterConditionComponent PropertyName="@nameof(ProductCategoryInputModel.CategoryId)" /></th>
-                <th><FilterConditionComponent PropertyName="@nameof(ProductCategoryInputModel.CategoryName)" /></th>
-            </EditableGridDataRow>
-        </TableHeader>
-        <RowTemplate Context="productCategory">
-            <EditableGridDataRow>
-                @* ItemCommand *@
+                <th class="middle center"><ynFilterInputText PropertyName="@nameof(ProductCategoryInputModel.CategoryId)" /></th>
+                <th class="middle center"><ynFilterInputText PropertyName="@nameof(ProductCategoryInputModel.CategoryName)" /></th>
+            </tr>
+        </Header>
+        <RowTemplate>
+            <tr>
                 <td class="middle center">
-                    <EditableItemEditButtonComponent Item="@productCategory" class="button is-small" />
+                    <ynEditableSwitch class="yn-button-flat yn-fit-w yn-none-h" />
                 </td>
                 <td class="middle center">
-                    <EditableItemDeleteButtonComponent Item="@productCategory" class="button is-small" />
+                    <ynEditableDelete class="yn-button-flat yn-fit-w yn-none-h" />
                 </td>
-                @* CategoryId *@
                 <td class="middle">
-                    <EditableTextLabelColumnComponent Item="@productCategory" PropertyName="@nameof(productCategory.CategoryId)" />
+                    <ynInputText PropertyName="@nameof(ProductCategoryInputModel.CategoryId)" />
                 </td>
-                @* CategoryName *@
                 <td class="middle">
-                    <EditableTextLabelColumnComponent Item="@productCategory" PropertyName="@nameof(productCategory.CategoryName)" />
+                    <ynInputText PropertyName="@nameof(ProductCategoryInputModel.CategoryName)" />
                 </td>
-            </EditableGridDataRow>
+            </tr>
         </RowTemplate>
-        <EditTemplate Context="productCategory">
-            <EditableGridDataRow>
-                @* ItemCommand *@
-                <td class="middle center">
-                    <EditableItemEditButtonComponent Item="@productCategory" />
-                </td>
-                <td class="middle center">
-                    <EditableItemDeleteButtonComponent Item="@productCategory" />
-                </td>
-                @* CategoryId *@
-                <td class="middle">
-                    <EditableTextControlComponent @bind-Value="productCategory.CategoryId" EditableState="EditStateOptions.Added" />
-                </td>
-                @* CategoryName *@
-                <td class="middle">
-                    <EditableTextControlComponent @bind-Value="productCategory.CategoryName" />
-                </td>
-            </EditableGridDataRow>
-        </EditTemplate>
-    </EditableGridComponent>
+    </ynGridView>
 </div>
 
 @*
@@ -127,14 +97,6 @@
     option content
     --------------------------------------------------
 *@
-<LayerManagerComponent @ref="LayerManager" class="optionbar">
-    @* SortOption *@
-    <SortOptionBarComponent TItem="ProductCategoryInputModel" Items="@ProductCategories" Name="SortOption" class="optionbar-content">
-        <SortConditionComponent PropertyName="@nameof(ProductCategoryInputModel.CategoryId)" DisplayName="@($"{WordResource.Category}{WordResource.Code}")" />
-        <SortConditionComponent PropertyName="@nameof(ProductCategoryInputModel.CategoryName)" DisplayName="@($"{WordResource.Category}{WordResource.Name}")" />
-    </SortOptionBarComponent>
-    @* Help *@
-    <TemplateLayerComponent Name="HelpOption" class="optionbar-content">
-        マスタメンテナンス画面のサンプル。
-    </TemplateLayerComponent>
-</LayerManagerComponent>
+<ynLayer class="optionbar">
+    <ProductCategoriesMaintenanceHelp @ref="HelpPanel" />
+</ynLayer>

@@ -15,6 +15,7 @@
  */
 
 using Microsoft.AspNetCore.Components;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using YaminabeBlazor.Component.Core.Enums;
@@ -54,8 +55,23 @@ namespace YaminabeBlazor.Web.Client.Pages
         /// <summary>
         /// 商品マスタリストを取得します。
         /// </summary>
-        protected EditableViewCollectionModel<ProductInputModel> Products { get; } = 
-            new EditableViewCollectionModel<ProductInputModel>();
+        protected List<ProductInputModel> Products { get; set; }
+
+        /// <summary>
+        /// 追加対象商品マスタリストを取得します。
+        /// </summary>
+        protected abstract IEnumerable<ProductInputModel> AddedProducts { get; }
+
+        /// <summary>
+        /// 更新対象商品マスタリストを取得します。
+        /// </summary>
+        protected abstract IEnumerable<ProductInputModel> ChangedProducts { get; }
+
+        /// <summary>
+        /// 削除対象商品マスタリストを取得します。
+        /// </summary>
+
+        protected abstract IEnumerable<ProductInputModel> DeletedProducts { get; }
 
         /// <summary>
         /// ブランドマスタ選択リストを取得します。
@@ -113,7 +129,7 @@ namespace YaminabeBlazor.Web.Client.Pages
             {
                 return;
             }
-            this.Products.Load(result.Products);
+            this.Products = result.Products;
         }
 
         /// <summary>
@@ -121,7 +137,7 @@ namespace YaminabeBlazor.Web.Client.Pages
         /// </summary>
         protected async Task PutProducts()
         {
-            var putResut = await this.ProductsWebApi.Put(this.Products);
+            var putResut = await this.ProductsWebApi.Put(this.AddedProducts, this.ChangedProducts, this.DeletedProducts);
             if (putResut.IsSuccessStatusCode() == false)
             {
                 return;

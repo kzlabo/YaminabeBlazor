@@ -26,7 +26,7 @@
     <div class="navbar-account">
         <input @bind="LoginInput.UserId" type="text" placeholder="@WordResource.LoginId" style="width:6rem;" />
         <input @bind="LoginInput.Password" type="password" placeholder="@WordResource.Password" style="width:6rem;" />
-        <button @onclick="OnLoginClick" type="button" style="width:6rem;">
+        <button @onclick="OnLoginClick" type="button" class="yn-button-flat yn-none-w yn-none-h" style="width:6rem;">
             @WordResource.Login
         </button>
     </div>

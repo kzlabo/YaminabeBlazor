@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using YaminabeBlazor.Component.Core.Extensions;
 using YaminabeBlazor.Core.Factories;
 using YaminabeBlazor.Web.Shared.Models;
 using YaminabeBlazor.Web.Shared.Services;
@@ -56,12 +55,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
 
         #region -------------------- method --------------------
 
-        /// <summary>
-        /// 商品カテゴリマスタリストを取得します。
-        /// </summary>
-        /// <returns>
-        /// 商品カテゴリマスタリストを返却します。
-        /// </returns>
+        /// <inheritdoc/>
         public async Task<(HttpStatusCode HttpStatusCode, List<ProductCategoryInputModel> ProductCategories)> Get()
         {
             return await Task<List<ProductCategoryInputModel>>.Run(() =>
@@ -82,22 +76,20 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
 
         }
 
-        /// <summary>
-        /// 商品カテゴリマスタリストを更新します。
-        /// </summary>
-        /// <param name="input">商品カテゴリマスタリストの更新対象。</param>
-        public Task<HttpStatusCode> Put(IEnumerable<ProductCategoryInputModel> input)
+        /// <inheritdoc/>
+        public Task<HttpStatusCode> Put(
+            IEnumerable<ProductCategoryInputModel> addedItems,
+            IEnumerable<ProductCategoryInputModel> changedItems,
+            IEnumerable<ProductCategoryInputModel> deletedItems
+            )
         {
             return Task.Run(() =>
             {
-                var addedProductCategories = input.GetAdded();
-                var modifiedProductCategories = input.GetModified();
-                var deletedProductCategories = input.GetDeleted();
                 var updateDateTime = DateTime.Now;
                 var updateUserId = "Stub";
 
                 // 追加
-                foreach (var productCategory in addedProductCategories)
+                foreach (var productCategory in addedItems)
                 {
                     var addedProductCategory = this._dataBase.ProductCategories.FirstOrDefault(p => p.CategoryId.Equals(productCategory.CategoryId));
                     if (addedProductCategory == null)
@@ -112,7 +104,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 }
 
                 // 更新
-                foreach (var productCategory in modifiedProductCategories)
+                foreach (var productCategory in changedItems)
                 {
                     var modifiedProductCategory = this._dataBase.ProductCategories.FirstOrDefault(p => p.CategoryId.Equals(productCategory.CategoryId));
                     if (modifiedProductCategory == null)
@@ -125,7 +117,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 }
 
                 // 削除
-                foreach (var productCategory in deletedProductCategories)
+                foreach (var productCategory in deletedItems)
                 {
                     var deletedProductCategory = this._dataBase.ProductCategories.FirstOrDefault(p => p.CategoryId.Equals(productCategory.CategoryId));
                     if (deletedProductCategory == null)

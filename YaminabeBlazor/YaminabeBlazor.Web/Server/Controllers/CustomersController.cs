@@ -19,10 +19,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
-using YaminabeBlazor.Component.Core.Extensions;
 using YaminabeBlazor.Core.Models;
 using YaminabeBlazor.Core.Services;
 using YaminabeBlazor.Web.Server.Dtos;
+using YaminabeBlazor.Web.Shared.Dtos;
 using YaminabeBlazor.Web.Shared.Models;
 
 namespace YaminabeBlazor.Web.Server.Controllers
@@ -110,14 +110,14 @@ namespace YaminabeBlazor.Web.Server.Controllers
         /// <param name="input">入力情報。</param>
         /// <param name="service">更新サービス。</param>
         public void Put(
-            [FromBody] IEnumerable<CustomerInputModel> input,
+            [FromBody] ItemsPutDto<CustomerInputModel> input,
             [FromServices] ICustomersPutService service
             )
         {
             var requestDto = new CustomersPutInputDto();
-            requestDto.AddedDtos = input.GetAdded();
-            requestDto.ChangedDtos = input.GetModified();
-            requestDto.DeletedDtos = input.GetDeleted();
+            requestDto.AddedDtos = input.AddedItems;
+            requestDto.ChangedDtos = input.ChangedItems;
+            requestDto.DeletedDtos = input.DeletedItems;
 
             service.Put(requestDto);
         }

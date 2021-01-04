@@ -15,11 +15,13 @@
  */
 
 using Microsoft.AspNetCore.Components;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using YaminabeBlazor.Component;
 using YaminabeBlazor.Component.Core.Extensions;
 using YaminabeBlazor.Component.Core.Models;
 using YaminabeBlazor.Component.Extensions;
-using YaminabeBlazor.Web.Client.Services;
+using YaminabeBlazor.Web.Client.Helps;
 using YaminabeBlazor.Web.Shared.ListItems;
 using YaminabeBlazor.Web.Shared.Models;
 using YaminabeBlazor.Web.Shared.Resources;
@@ -51,10 +53,19 @@ namespace YaminabeBlazor.Web.Client.Pages
         protected ICustomerMaintenanceSettingApiService CustomerMaintenanceSettingWebApi { get; set; }
 
         /// <summary>
+        /// 得意先マスタ編集グリッドを取得または設定します。
+        /// </summary>
+        private ynGridView<CustomerInputModel> MasterGridView { get; set; }
+
+        /// <summary>
+        /// ヘルプレイヤーを取得または設定します。
+        /// </summary>
+        private CustomersMaintenanceHelp HelpPanel { get; set; }
+
+        /// <summary>
         /// 得意先マスタリストを取得または設定します。
         /// </summary>
-        public EditableViewCollectionModel<CustomerInputModel> Customers { get; } = 
-            new EditableViewCollectionModel<CustomerInputModel>();
+        public List<CustomerInputModel> Customers { get; set; } = new List<CustomerInputModel>();
 
         /// <summary>
         /// 締日マスタの選択リストモデルを取得または設定します。
@@ -126,7 +137,7 @@ namespace YaminabeBlazor.Web.Client.Pages
             {
                 return;
             }
-            this.Customers.Load(result.Customers);
+            this.Customers = result.Customers;
         }
 
         /// <summary>
@@ -134,7 +145,7 @@ namespace YaminabeBlazor.Web.Client.Pages
         /// </summary>
         private async Task PutCustomers()
         {
-            var putResut = await this.CustomersWebApi.Put(this.Customers);
+            var putResut = await this.CustomersWebApi.Put(this.MasterGridView.AddedItems, this.MasterGridView.ChangedItems, this.MasterGridView.DeletedItems);
             if (putResut.IsSuccessStatusCode() == false)
             {
                 return;
@@ -155,6 +166,8 @@ namespace YaminabeBlazor.Web.Client.Pages
         /// </summary>
         private async Task OnSearchClick()
         {
+            this.Customers = null;
+
             await this.SearchCustomers();
         }
 
@@ -182,19 +195,11 @@ namespace YaminabeBlazor.Web.Client.Pages
         }
 
         /// <summary>
-        /// 並び替えボタン押下時の処理を行います。
-        /// </summary>
-        private void OnSortClick()
-        {
-            this.LayerManager.Show("SortOption");
-        }
-
-        /// <summary>
         /// ヘルプボタン押下時の処理を行います。
         /// </summary>
         private void OnHelpClick()
         {
-            this.LayerManager.Show("HelpOption");
+            this.HelpPanel.Show();
         }
 
         #endregion

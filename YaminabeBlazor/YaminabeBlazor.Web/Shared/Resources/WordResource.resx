@@ -144,6 +144,9 @@
   <data name="Ceo" xml:space="preserve">
     <value>代表者</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
   <data name="Code" xml:space="preserve">
     <value>コード</value>
   </data>

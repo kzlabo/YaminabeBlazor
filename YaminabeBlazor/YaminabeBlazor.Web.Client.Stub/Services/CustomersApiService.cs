@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using YaminabeBlazor.Component.Core.Extensions;
 using YaminabeBlazor.Core.Factories;
 using YaminabeBlazor.Web.Shared.Models;
 using YaminabeBlazor.Web.Shared.Services;
@@ -56,12 +55,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
 
         #region -------------------- method --------------------
 
-        /// <summary>
-        /// 得意先マスタリストを取得します。
-        /// </summary>
-        /// <returns>
-        /// 得意先マスタリストを返却します。
-        /// </returns>
+        /// <inheritdoc/>
         public async Task<(HttpStatusCode HttpStatusCode, List<CustomerInputModel> Customers)> Get()
         {
             return await Task<List<CustomerInputModel>>.Run(() =>
@@ -104,22 +98,20 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
             });
         }
 
-        /// <summary>
-        /// 得意先マスタリストを更新します。
-        /// </summary>
-        /// <param name="input">得意先マスタリストの更新対象。</param>
-        public Task<HttpStatusCode> Put(IEnumerable<CustomerInputModel> input)
+        /// <inheritdoc/>
+        public Task<HttpStatusCode> Put(
+            IEnumerable<CustomerInputModel> addedItems,
+            IEnumerable<CustomerInputModel> changedItems,
+            IEnumerable<CustomerInputModel> deletedItems
+            )
         {
             return Task.Run(() =>
             {
-                var addedCustomers = input.GetAdded();
-                var modifiedCustomers = input.GetModified();
-                var deletedCustomers = input.GetDeleted();
                 var updateDateTime = DateTime.Now;
                 var updateUserId = "Stub";
 
                 // 追加
-                foreach (var customer in addedCustomers)
+                foreach (var customer in addedItems)
                 {
                     var addedBrand = this._dataBase.Customers.FirstOrDefault(c => c.CustomerId.Equals(customer.CustomerId));
                     if (addedBrand == null)
@@ -152,7 +144,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 }
 
                 // 更新
-                foreach (var customer in modifiedCustomers)
+                foreach (var customer in changedItems)
                 {
                     var modifiedCustomer = this._dataBase.Customers.FirstOrDefault(c => c.CustomerId.Equals(customer.CustomerId));
                     if (modifiedCustomer == null)
@@ -183,7 +175,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 }
 
                 // 削除
-                foreach (var customer in deletedCustomers)
+                foreach (var customer in deletedItems)
                 {
                     var deletedCustomer = this._dataBase.Customers.FirstOrDefault(c => c.CustomerId.Equals(customer.CustomerId));
                     if (deletedCustomer == null)

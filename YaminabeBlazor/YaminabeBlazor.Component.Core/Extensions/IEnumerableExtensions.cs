@@ -235,6 +235,138 @@ namespace YaminabeBlazor.Component.Core.Extensions
         }
 
         /// <summary>
+        /// ソート条件で指定した順に並び替えたリストを取得します。
+        /// </summary>
+        /// <typeparam name="T">列挙の型。</typeparam>
+        /// <param name="items">コンテキストリスト。</param>
+        /// <param name="sortConditions">ソート条件リスト。</param>
+        /// <returns>
+        /// ソート条件で指定した順に並び替えたリストを返却します。
+        /// </returns>
+        public static IEnumerable<T> SortItems<T>(
+            this IEnumerable<T> items,
+            Dictionary<string, SortCondition> sortConditions
+            )
+        {
+            // ソート条件が未指定の場合は無視
+            if ((sortConditions?.Keys?.Count ?? 0) == 0)
+            {
+                return items;
+            }
+
+            // プロパティ項目へのアクセス高速化の為にアクセサの作成
+            var properties = items.First().GetType().GetProperties();
+            var accessors = new Dictionary<string, IAccessor>();
+            foreach (var key in sortConditions.Keys)
+            {
+                var property = properties.FirstOrDefault(p => p.Name.Equals(key));
+                accessors[property.Name] = property.ToAccessor();
+            }
+
+
+            // ソート条件でデータアイテムをソート
+            bool first = true;
+            IOrderedEnumerable<T> workingItems = null;
+            foreach (var sortCondition in sortConditions.Values.Where(s => s.SortNo > 0).OrderBy(s => s.SortNo))
+            {
+                var accessor = accessors[sortCondition.PropertyName];
+
+                if (first == true)
+                {
+                    first = false;
+
+                    if (sortCondition.SortOption == SortOptions.Asc)
+                    {
+                        workingItems = items.OrderBy(item => accessor.GetValue(item));
+                    }
+                    else
+                    {
+                        workingItems = items.OrderByDescending(item => accessor.GetValue(item));
+                    }
+                }
+                else
+                {
+                    if (sortCondition.SortOption == SortOptions.Asc)
+                    {
+                        workingItems = workingItems.ThenBy(item => accessor.GetValue(item));
+                    }
+                    else
+                    {
+                        workingItems = workingItems.ThenByDescending(item => accessor.GetValue(item));
+                    }
+                }
+            }
+            return workingItems ?? items;
+        }
+
+
+        /// <summary>
+        /// ソート条件で指定した順に並び替えたリストを取得します。
+        /// </summary>
+        /// <typeparam name="T">列挙の型。</typeparam>
+        /// <param name="contexts">コンテキストリスト。</param>
+        /// <param name="sortConditions">ソート条件リスト。</param>
+        /// <returns>
+        /// ソート条件で指定した順に並び替えたリストを返却します。
+        /// </returns>
+        public static IEnumerable<T> SortItemsA<T>(
+            this IEnumerable<T> contexts,
+            Dictionary<string, SortCondition> sortConditions
+            )
+            where T : EditableContext
+        {
+            // ソート条件が未指定の場合は無視
+            if ((sortConditions?.Keys?.Count ?? 0) == 0)
+            {
+                return contexts;
+            }
+
+            // プロパティ項目へのアクセス高速化の為にアクセサの作成
+            var properties = contexts.First().Item.GetType().GetProperties();
+            var accessors = new Dictionary<string, IAccessor>();
+            foreach (var key in sortConditions.Keys)
+            {
+                var property = properties.FirstOrDefault(p => p.Name.Equals(key));
+                accessors[property.Name] = property.ToAccessor();
+            }
+
+
+            // ソート条件でデータアイテムをソート
+            bool first = true;
+            IOrderedEnumerable<T> workingItems = null;
+            foreach (var sortCondition in sortConditions.Values.Where(s => s.SortNo > 0).OrderBy(s => s.SortNo))
+            {
+                var accessor = accessors[sortCondition.PropertyName];
+
+                if (first == true)
+                {
+                    first = false;
+
+                    if (sortCondition.SortOption == SortOptions.Asc)
+                    {
+                        workingItems = contexts.OrderBy(c => accessor.GetValue(c.Item));
+                    }
+                    else
+                    {
+                        workingItems = contexts.OrderByDescending(c => accessor.GetValue(c.Item));
+                    }
+                }
+                else
+                {
+                    if (sortCondition.SortOption == SortOptions.Asc)
+                    {
+                        workingItems = workingItems.ThenBy(c => accessor.GetValue(c.Item));
+                    }
+                    else
+                    {
+                        workingItems = workingItems.ThenByDescending(c => accessor.GetValue(c.Item));
+                    }
+                }
+            }
+            return workingItems??contexts;
+        }
+
+        /// <summary>
         /// フィルタ条件で抽出したリストを取得します。
         /// </summary>
         /// <typeparam name="T">列挙の型。</typeparam>
@@ -261,7 +393,6 @@ namespace YaminabeBlazor.Component.Core.Extensions
             {
                 var property = properties.FirstOrDefault(p => p.Name.Equals(filterCondition.Key));
                 accessors[property.Name] = property.ToAccessor();
-
             }
 
             // フィルタ条件に合致するデータアイテムを返却
@@ -269,9 +400,121 @@ namespace YaminabeBlazor.Component.Core.Extensions
             {
                 foreach (var filterCondition in filterConditionValues)
                 {
+                    if (string.IsNullOrEmpty(filterCondition.Value.FilterText) == true)
+                    {
+                        continue;
+                    }
+
                     var accessor = accessors[filterCondition.Key];
                     var filterConditionConfig = filterCondition.Value;
                     if (MatchFilterCondition(accessor.GetValue(item), filterConditionConfig.FilterText, filterConditionConfig.PartialMatch) == false)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            });
+        }
+
+        /// <summary>
+        /// フィルタ条件で抽出したリストを取得します。
+        /// </summary>
+        /// <typeparam name="T">列挙の型。</typeparam>
+        /// <param name="items">コンテキストリスト。</param>
+        /// <param name="filterConditionValues">フィルタ条件リスト。</param>
+        /// <returns>
+        /// フィルタ条件で抽出したリストを返却します。
+        /// </returns>
+        public static IEnumerable<T> FilterItems<T>(
+            this IEnumerable<T> items,
+            Dictionary<string, FilterCondition> filterConditions
+            )
+        {
+            // フィルタ条件が未指定の場合は無視
+            if ((filterConditions?.Keys?.Count ?? 0) == 0)
+            {
+                return items;
+            }
+
+            // プロパティ項目へのアクセス高速化の為にアクセサの作成
+            var properties = items.First().GetType().GetProperties();
+            var accessors = new Dictionary<string, IAccessor>();
+            foreach (var key in filterConditions.Keys)
+            {
+                var property = properties.FirstOrDefault(p => p.Name.Equals(key));
+                accessors[property.Name] = property.ToAccessor();
+            }
+
+            // フィルタ条件に合致するデータアイテムを返却
+            return items?.Where(item =>
+            {
+                foreach (var filterCondition in filterConditions.Values)
+                {
+                    if (string.IsNullOrEmpty(filterCondition.FilterText) == true)
+                    {
+                        continue;
+                    }
+
+                    var accessor = accessors[filterCondition.PropertyName];
+                    if (MatchFilterCondition(
+                        accessor.GetValue(item),
+                        filterCondition.FilterText,
+                        filterCondition.PartialMatch
+                        ) == false)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            });
+        }
+
+        /// <summary>
+        /// フィルタ条件で抽出したリストを取得します。
+        /// </summary>
+        /// <typeparam name="T">列挙の型。</typeparam>
+        /// <param name="items">コンテキストリスト。</param>
+        /// <param name="filterConditionValues">フィルタ条件リスト。</param>
+        /// <returns>
+        /// フィルタ条件で抽出したリストを返却します。
+        /// </returns>
+        public static IEnumerable<T> EditableFilterItems<T>(
+            this IEnumerable<T> contexts,
+            Dictionary<string, FilterCondition> filterConditions
+            )
+            where T : EditableContext
+        {
+            // フィルタ条件が未指定の場合は無視
+            if ((filterConditions?.Keys?.Count ?? 0) == 0)
+            {
+                return contexts;
+            }
+
+            // プロパティ項目へのアクセス高速化の為にアクセサの作成
+            var properties = contexts.First().Item.GetType().GetProperties();
+            var accessors = new Dictionary<string, IAccessor>();
+            foreach (var key in filterConditions.Keys)
+            {
+                var property = properties.FirstOrDefault(p => p.Name.Equals(key));
+                accessors[property.Name] = property.ToAccessor();
+            }
+
+            // フィルタ条件に合致するデータアイテムを返却
+            return contexts?.Where(context =>
+            {
+                foreach (var filterCondition in filterConditions.Values)
+                {
+                    if (string.IsNullOrEmpty(filterCondition.FilterText) == true)
+                    {
+                        continue;
+                    }
+
+                    var accessor = accessors[filterCondition.PropertyName];
+                    if (MatchFilterCondition(
+                        accessor.GetValue(context.Item), 
+                        filterCondition.FilterText, 
+                        filterCondition.PartialMatch
+                        ) == false)
                     {
                         return false;
                     }

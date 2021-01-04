@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using YaminabeBlazor.Component.Core.Extensions;
 using YaminabeBlazor.Core.Enums;
 using YaminabeBlazor.Core.Factories;
 using YaminabeBlazor.Web.Shared.Models;
@@ -57,12 +56,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
 
         #region -------------------- method --------------------
 
-        /// <summary>
-        /// 商品マスタリストを取得します。
-        /// </summary>
-        /// <returns>
-        /// 商品マスタリストを返却します。
-        /// </returns>
+        /// <inheritdoc/>
         public async Task<(HttpStatusCode HttpStatusCode, List<ProductInputModel> Products)> Get()
         {
             return await Task<List<ProductInputModel>>.Run(() =>
@@ -89,22 +83,20 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
             });
         }
 
-        /// <summary>
-        /// 商品マスタリストを更新します。
-        /// </summary>
-        /// <param name="input">商品マスタリストの更新対象。</param>
-        public Task<HttpStatusCode> Put(IEnumerable<ProductInputModel> input)
+        /// <inheritdoc/>
+        public Task<HttpStatusCode> Put(
+            IEnumerable<ProductInputModel> addedItems,
+            IEnumerable<ProductInputModel> changedItems,
+            IEnumerable<ProductInputModel> deletedItems
+            )
         {
             return Task.Run(() =>
             {
-                var addedProducts = input.GetAdded();
-                var modifiedProducts = input.GetModified();
-                var deletedProducts = input.GetDeleted();
                 var updateDateTime = DateTime.Now;
                 var updateUserId = "Stub";
 
                 // 追加
-                foreach (var product in addedProducts)
+                foreach (var product in addedItems)
                 {
                     var addedProduct = this._dataBase.Products.FirstOrDefault(p => p.ProductId.Equals(product.ProductId));
                     if (addedProduct == null)
@@ -123,7 +115,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 }
 
                 // 更新
-                foreach (var product in modifiedProducts)
+                foreach (var product in changedItems)
                 {
                     var modifiedProduct = this._dataBase.Products.FirstOrDefault(p => p.ProductId.Equals(product.ProductId));
                     if (modifiedProduct == null)
@@ -140,7 +132,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 }
 
                 // 削除
-                foreach (var product in deletedProducts)
+                foreach (var product in deletedItems)
                 {
                     var deletedProduct = this._dataBase.Products.FirstOrDefault(p => p.ProductId.Equals(product.ProductId));
                     if (deletedProduct == null)

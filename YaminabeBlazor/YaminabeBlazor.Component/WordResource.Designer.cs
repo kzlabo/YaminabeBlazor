@@ -61,6 +61,15 @@ namespace YaminabeBlazor.Component {
         }
         
         /// <summary>
+        ///   追加入力 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string AddGridMode {
+            get {
+                return ResourceManager.GetString("AddGridMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   閉じる に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string Close {
@@ -70,25 +79,43 @@ namespace YaminabeBlazor.Component {
         }
         
         /// <summary>
-        ///   追加入力 に類似しているローカライズされた文字列を検索します。
+        ///   完了 に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string ItemsAddInput {
+        internal static string Complete {
             get {
-                return ResourceManager.GetString("ItemsAddInput", resourceCulture);
+                return ResourceManager.GetString("Complete", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   追加確定 に類似しているローカライズされた文字列を検索します。
+        ///   削除 に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string ItemsCompleteInput {
+        internal static string Delete {
             get {
-                return ResourceManager.GetString("ItemsCompleteInput", resourceCulture);
+                return ResourceManager.GetString("Delete", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   次へ に類似しているローカライズされた文字列を検索します。
+        ///   編集 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string Edit {
+            get {
+                return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   編集入力 に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string EditGridMode {
+            get {
+                return ResourceManager.GetString("EditGridMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   &gt;&gt; に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PagenationNext {
             get {
@@ -97,7 +124,7 @@ namespace YaminabeBlazor.Component {
         }
         
         /// <summary>
-        ///   前へ に類似しているローカライズされた文字列を検索します。
+        ///   &lt;&lt; に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string PagenationPrevious {
             get {

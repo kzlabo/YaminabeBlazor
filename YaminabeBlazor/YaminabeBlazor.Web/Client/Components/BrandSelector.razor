@@ -1,0 +1,50 @@
+﻿@*
+    * Copyright 2020 kzlabo
+    *
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *
+    *     http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+*@
+<OptionBar @ref="OptionBar">
+    <ynGridView TItem="BrandListItem"
+                Items="@BrandList"
+                IsVirtualize="false"
+                AllowCommand="false"
+                class="table is-bordered is-hoverable is-slim is-color-patterned"
+                style="width:100%; table-layout:fixed; word-break: break-all;">
+        <Colgroups>
+            <colgroup>
+                <col style="width:120px;" />
+                <col style="width:calc(100% - 120px);" />
+            </colgroup>
+        </Colgroups>
+        <Header>
+            <tr>
+                <ynTh PropertyName="@nameof(BrandListItem.BrandId)" class="middle center">@($"{WordResource.Code}")</ynTh>
+                <ynTh PropertyName="@nameof(BrandListItem.BrandName)" class="middle center">@($"{WordResource.Name}")</ynTh>
+            </tr>
+            <tr>
+                <th class="middle center"><ynFilterInputText PropertyName="@nameof(BrandListItem.BrandId)" /></th>
+                <th class="middle center"><ynFilterInputText PropertyName="@nameof(BrandListItem.BrandName)" /></th>
+            </tr>
+        </Header>
+        <RowTemplate>
+            <tr>
+                <td class="middle center">
+                    <ynButton PropertyName="@nameof(BrandListItem.BrandId)" @onclick="() => { OnBrandClick(context); }" class="yn-button-flat yn-fit-w yn-none-h" />
+                </td>
+                <td class="middle">
+                    <ynText PropertyName="@nameof(BrandListItem.BrandName)" />
+                </td>
+            </tr>
+        </RowTemplate>
+    </ynGridView>
+</OptionBar>

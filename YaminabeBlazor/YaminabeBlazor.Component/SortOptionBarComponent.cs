@@ -42,7 +42,7 @@ namespace YaminabeBlazor.Component
         /// コンポーネントの設定アクセサを取得または設定します。
         /// </summary>
         [Inject]
-        private IOptions<YaminabeBlazorOptions> OptionsAccesor { get; set; }
+        private IOptions<YaminabeBlazorOptions> OptionsAccessor { get; set; }
 
         /// <summary>
         /// データアイテムリストを取得または設定します。
@@ -68,7 +68,7 @@ namespace YaminabeBlazor.Component
         {
             get
             {
-                return this.OptionsAccesor.Value.GetWordResouce(nameof(WordResource.SortOn));
+                return this.OptionsAccessor.Value.GetWordResouce(nameof(WordResource.SortOn));
             }
         }
 
@@ -79,7 +79,7 @@ namespace YaminabeBlazor.Component
         {
             get
             {
-                return this.OptionsAccesor.Value.GetWordResouce(nameof(WordResource.SortOff));
+                return this.OptionsAccessor.Value.GetWordResouce(nameof(WordResource.SortOff));
             }
         }
 
@@ -90,7 +90,7 @@ namespace YaminabeBlazor.Component
         {
             get
             {
-                return this.OptionsAccesor.Value.GetWordResouce(nameof(WordResource.Close));
+                return this.OptionsAccessor.Value.GetWordResouce(nameof(WordResource.Close));
             }
         }
 

@@ -35,7 +35,7 @@ namespace YaminabeBlazor.Component
         /// コンポーネントの設定アクセサを取得または設定します。
         /// </summary>
         [Inject]
-        private IOptions<YaminabeBlazorOptions> OptionsAccesor { get; set; }
+        private IOptions<YaminabeBlazorOptions> OptionsAccessor { get; set; }
 
         /// <summary>
         /// 子コンテンツを取得または設定します。
@@ -50,7 +50,7 @@ namespace YaminabeBlazor.Component
         {
             get
             {
-                return this.OptionsAccesor.Value.GetWordResouce(nameof(WordResource.Close));
+                return this.OptionsAccessor.Value.GetWordResouce(nameof(WordResource.Close));
             }
         }
 

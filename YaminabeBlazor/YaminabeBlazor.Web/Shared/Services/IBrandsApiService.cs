@@ -42,8 +42,14 @@ namespace YaminabeBlazor.Web.Shared.Services
         /// <summary>
         /// ブランドマスタリストを更新します。
         /// </summary>
-        /// <param name="input">ブランドマスタリストの更新対象。</param>
-        Task<HttpStatusCode> Put(IEnumerable<BrandInputModel> input);
+        /// <param name="addedItems">ブランドマスタリストの追加対象。</param>
+        /// <param name="changedItems">ブランドマスタリストの更新対象。</param>
+        /// <param name="deletedItems">ブランドマスタリストの削除対象。</param>
+        Task<HttpStatusCode> Put(
+            IEnumerable<BrandInputModel> addedItems,
+            IEnumerable<BrandInputModel> changedItems,
+            IEnumerable<BrandInputModel> deletedItems
+            );
 
         #endregion
     }

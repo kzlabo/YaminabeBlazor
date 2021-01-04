@@ -16,25 +16,23 @@
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using YaminabeBlazor.Component.Core.Models;
+using YaminabeBlazor.Component.Core;
 
 namespace YaminabeBlazor.Component
 {
     /// <summary>
     /// データアイテムのコンテナを提供します。
     /// </summary>
-    /// <typeparam name="TItem">データアイテムの型。</typeparam>
     /// <revisionHistory>
     ///     <revision date="2020/11/15" version="0.0.1-alfa" author="kzlabo">新規作成。</revision>
     /// </revisionHistory>
-    public class ItemContainer<TItem> : ComponentBase
-        where TItem : IEditableViewModel
+    public class ItemContainer : ComponentBase
     {
         #region -------------------- field --------------------
 
         private bool _first = true;
         private bool _shouldRender = false;
-        private TItem _item;
+        private EditableContext _editableContext;
 
         #endregion
 
@@ -47,31 +45,31 @@ namespace YaminabeBlazor.Component
         public RenderFragment ChildContent { get; set; }
 
         /// <summary>
-        /// データアイテムを取得または設定します。
+        /// データコンテキストを取得または設定します。
         /// </summary>
         /// <remarks>
-        /// コンテナに設定されたデータアイテムの参照が変更された場合
+        /// コンテナに設定されたデータコンテキストの参照が変更された場合
         /// <list type="bullet">
         ///     <item>デリゲートを削除。</item>
         ///     <item>再レンダリングの為にレンダリング要否フラグに <c>true</c> を設定。</item>
         /// </list>
         /// </remarks>
         [Parameter]
-        public TItem Item
+        public EditableContext Context
         {
             get
             {
-                return this._item;
+                return this._editableContext;
             }
             set
             {
-                if (this._item != null && ReferenceEquals(this._item, value) == false)
+                if (this._editableContext != null && ReferenceEquals(this._editableContext, value) == false)
                 {
-                    this._item.StateHasChanged -= this.ItemStateHanChanged;
                     this._shouldRender = true;
+                    this._editableContext.StateHasChanged -= this.ItemStateHanChanged;
                 }
-                this._item = value;
-                this._item.StateHasChanged += this.ItemStateHanChanged;
+                this._editableContext = value;
+                this._editableContext.StateHasChanged += this.ItemStateHanChanged;
             }
         }
 
@@ -110,7 +108,14 @@ namespace YaminabeBlazor.Component
         /// <param name="builder">ビルダ。</param>
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-            builder.AddContent(0, this.ChildContent);
+            builder.OpenComponent<CascadingValue<EditableContext>>(0);
+            builder.AddAttribute(1, "Value", this.Context);
+            builder.AddAttribute(2, "Name", "CascadeEditableContext");
+            builder.AddAttribute(3, "ChildContent", (RenderFragment)(builder1 =>
+            {
+                this.ChildContent?.Invoke(builder1);
+            }));
+            builder.CloseComponent();
         }
 
         /// <summary>

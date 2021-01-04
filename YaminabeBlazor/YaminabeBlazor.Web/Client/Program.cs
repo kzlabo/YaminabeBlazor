@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using YaminabeBlazor.Component.Extensions;
 using YaminabeBlazor.Component.Services;
 using YaminabeBlazor.Component.Settings;
 using YaminabeBlazor.Web.Client.Extensions;
@@ -35,11 +36,12 @@ namespace YaminabeBlazor.Web.Client
 
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 
+            builder.Services.UseYaminabeBlazorComponent();
             builder.Services.UseYaminabeBlazorApi();
 
             // -------------------- LocalOnly Stub --------------------
             // ローカル環境のみで実行する為のスタブ
-            builder.Services.UseYaminabeBlazorResponseTestClientStub();
+            builder.Services.UseYaminabeBlazorClientStub();
 
             await builder.Build().RunAsync();
         }

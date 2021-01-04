@@ -14,10 +14,17 @@
  * limitations under the License.
  */
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using YaminabeBlazor.Component;
+using YaminabeBlazor.Component.Core;
 using YaminabeBlazor.Component.Core.Extensions;
 using YaminabeBlazor.Component.Core.Models;
 using YaminabeBlazor.Component.Extensions;
+using YaminabeBlazor.Web.Client.Components;
+using YaminabeBlazor.Web.Client.Helps;
+using YaminabeBlazor.Web.Shared.ListItems;
+using YaminabeBlazor.Web.Shared.Models;
 using YaminabeBlazor.Web.Shared.Resources;
 
 namespace YaminabeBlazor.Web.Client.Pages
@@ -31,6 +38,59 @@ namespace YaminabeBlazor.Web.Client.Pages
     /// </revisionHistory>
     public partial class ProductsMaintenance : ProductsMaintenanceBase
     {
+        #region -------------------- property --------------------
+
+        /// <summary>
+        /// 商品マスタ編集グリッドを取得または設定します。
+        /// </summary>
+        private ynGridView<ProductInputModel> ProductGridView { get; set; }
+
+        /// <summary>
+        /// ブランド選択レイヤーを取得または設定します。
+        /// </summary>
+        private BrandSelector BrandSelectorPanel { get; set; }
+
+        /// <summary>
+        /// ヘルプレイヤーを取得または設定します。
+        /// </summary>
+        private ProductsMaintenanceHelp HelpPanel { get; set; }
+
+        /// <summary>
+        /// 追加対象商品マスタリストを取得します。
+        /// </summary>
+        protected override IEnumerable<ProductInputModel> AddedProducts
+        {
+            get
+            {
+                return this.ProductGridView.AddedItems;
+            }
+        }
+
+        /// <summary>
+        /// 更新対象商品マスタリストを取得します。
+        /// </summary>
+        protected override IEnumerable<ProductInputModel> ChangedProducts
+        {
+            get
+            {
+                return this.ProductGridView.ChangedItems;
+            }
+        }
+
+        /// <summary>
+        /// 削除対象商品マスタリストを取得します。
+        /// </summary>
+
+        protected override IEnumerable<ProductInputModel> DeletedProducts
+        {
+            get
+            {
+                return this.ProductGridView.DeletedItems;
+            }
+        }
+
+        #endregion
+
         #region -------------------- event --------------------
 
         /// <summary>
@@ -38,6 +98,8 @@ namespace YaminabeBlazor.Web.Client.Pages
         /// </summary>
         private async Task OnSearchClick()
         {
+            this.Products = null;
+
             await this.SearchProducts();
         }
 
@@ -65,27 +127,25 @@ namespace YaminabeBlazor.Web.Client.Pages
         }
 
         /// <summary>
-        /// 並び替えボタン押下時の処理を行います。
-        /// </summary>
-        private void OnSortClick()
-        {
-            this.LayerManager.Show("SortOption");
-        }
-
-        /// <summary>
         /// ヘルプボタン押下時の処理を行います。
         /// </summary>
         private void OnHelpClick()
         {
-            this.LayerManager.Show("HelpOption");
+            this.HelpPanel.Show();
         }
 
         /// <summary>
         /// ブランド選択ボタン押下時の処理を行います。
         /// </summary>
-        protected void OnBrandSelectClick()
+        /// <param name="context">商品編集データコンテキスト。</param>
+        protected void OnBrandSelectClick(EditableContext context)
         {
-            this.LayerManager.Show("BrandSelectorOption");
+            this.BrandSelectorPanel.Show((BrandListItem brand) =>
+            {
+                var product = context.CastItem<ProductInputModel>();
+                product.SetBrand(brand);
+                context.StateHasChanged();
+            });
         }
 
         #endregion

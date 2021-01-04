@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using YaminabeBlazor.Component.Core.Extensions;
 using YaminabeBlazor.Core.Factories;
 using YaminabeBlazor.Web.Shared.Models;
 using YaminabeBlazor.Web.Shared.Services;
@@ -56,12 +55,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
 
         #region -------------------- method --------------------
 
-        /// <summary>
-        /// ブランドマスタリストを取得します。
-        /// </summary>
-        /// <returns>
-        /// ブランドマスタリストを返却します。
-        /// </returns>
+        /// <inheritdoc/>
         public async Task<(HttpStatusCode HttpStatusCode, List<BrandInputModel> Brands)> Get()
         {
             return await Task<List<BrandInputModel>>.Run(() =>
@@ -82,22 +76,20 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
             });
         }
 
-        /// <summary>
-        /// ブランドマスタリストを更新します。
-        /// </summary>
-        /// <param name="input">ブランドマスタリストの更新対象。</param>
-        public Task<HttpStatusCode> Put(IEnumerable<BrandInputModel> input)
+        /// <inheritdoc/>
+        public Task<HttpStatusCode> Put(
+            IEnumerable<BrandInputModel> addedItems,
+            IEnumerable<BrandInputModel> changedItems,
+            IEnumerable<BrandInputModel> deletedItems
+            )
         {
             return Task.Run(() =>
             {
-                var addedBrands = input.GetAdded();
-                var modifiedBrands = input.GetModified();
-                var deletedBrands = input.GetDeleted();
                 var updateDateTime = DateTime.Now;
                 var updateUserId = "Stub";
 
                 // 追加
-                foreach (var brand in addedBrands)
+                foreach (var brand in addedItems)
                 {
                     var addedBrand = this._dataBase.Brands.FirstOrDefault(p => p.BrandId.Equals(brand.BrandId));
                     if (addedBrand == null)
@@ -113,7 +105,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 }
 
                 // 更新
-                foreach (var brand in modifiedBrands)
+                foreach (var brand in changedItems)
                 {
                     var modifiedBrand = this._dataBase.Brands.FirstOrDefault(p => p.BrandId.Equals(brand.BrandId));
                     if (modifiedBrand == null)
@@ -127,7 +119,7 @@ namespace YaminabeBlazor.Web.Client.Stub.Services
                 }
 
                 // 削除
-                foreach (var brand in deletedBrands)
+                foreach (var brand in deletedItems)
                 {
                     var deletedBrand = this._dataBase.Brands.FirstOrDefault(p => p.BrandId.Equals(brand.BrandId));
                     if (deletedBrand == null)

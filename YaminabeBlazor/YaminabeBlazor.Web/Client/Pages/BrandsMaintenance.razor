@@ -33,104 +33,69 @@
         command area
         --------------------------------------------------
     *@
-    <div>
-        <p>
-            <button @onclick="OnSearchClick" type="button">@WordResource.Search</button>
-            <button @onclick="OnPutClick" type="button">@WordResource.Commit</button>
-            <button @onclick="OnHelpClick" type="button">@WordResource.Help</button>
-        </p>
+    <div class="yn-command">
+        <button @onclick="OnSearchClick" type="button" class="yn-button">@WordResource.Search</button>
+        <button @onclick="OnPutClick" type="button" class="yn-button">@WordResource.Commit</button>
+        <button @onclick="OnHelpClick" type="button" class="yn-button">@WordResource.Help</button>
     </div>
 
-    @*
-        --------------------------------------------------
-        grid command area
-        --------------------------------------------------
-    *@
-    <div>
-        <EditableItemAddButtonComponent TItem="BrandInputModel" Items="Brands" />
-        <button @onclick="OnSortClick" type="button">@WordResource.Sort</button>
-    </div>
     @*
         --------------------------------------------------
         grid item area
         --------------------------------------------------
     *@
-    <EditableGridComponent TItem="BrandInputModel"
-                           Items="@Brands"
-                           EditRowClass="is-selected"
-                           DeletedRowClass="is-deleted"
-                           class="table is-bordered is-slim is-color-patterned"
-                           style="width:100%; min-width:1000px; table-layout:fixed; word-break: break-all;">
-        <TableColgroup>
-            <col style="width:60px;" />
-            <col style="width:60px;" />
-            <col style="width:120px;" />
-            <col style="width:200px;" />
-            <col style="width:calc(100% - 440px);min-width:300px;" />
-        </TableColgroup>
-        <TableHeader>
-            <EditableGridDataRow>
+    <ynGridView TItem="BrandInputModel"
+                Items="@Brands"
+                PagingType="PagingTypeOptions.None"
+                IsVirtualize="true"
+                @ref="BrandGridView"
+                class="table is-bordered is-hoverable is-slim is-color-patterned"
+                style="width:100%; min-width:1000px; table-layout:fixed; word-break: break-all;">
+        <Colgroups>
+            <colgroup>
+                <col style="width:60px;" />
+                <col style="width:60px;" />
+                <col style="width:160px;" />
+                <col style="width:200px;" />
+                <col style="width:calc(100% - 480px);min-width:300px;" />
+            </colgroup>
+        </Colgroups>
+        <Header>
+            <tr>
                 <th></th>
                 <th></th>
-                <th class="middle center">@($"{WordResource.Brand}{WordResource.Code}")</th>
-                <th class="middle center">@($"{WordResource.Brand}{WordResource.Name}")</th>
-                <th class="middle center">@($"{WordResource.Note}")</th>
-            </EditableGridDataRow>
-            <EditableGridDataRow>
+                <ynTh PropertyName="@nameof(BrandInputModel.BrandId)" class="middle center" />
+                <ynTh PropertyName="@nameof(BrandInputModel.BrandName)" class="middle center" />
+                <ynTh PropertyName="@nameof(BrandInputModel.Note)" class="middle center" />
+            </tr>
+            <tr>
                 <th></th>
                 <th></th>
-                <th><FilterConditionComponent PropertyName="@nameof(BrandInputModel.BrandId)" /></th>
-                <th><FilterConditionComponent PropertyName="@nameof(BrandInputModel.BrandName)" /></th>
-                <th><FilterConditionComponent PropertyName="@nameof(BrandInputModel.Note)" /></th>
-            </EditableGridDataRow>
-        </TableHeader>
-        <RowTemplate Context="brand">
-            <EditableGridDataRow>
-                @* ItemCommand *@
+                <th class="middle center"><ynFilterInputText PropertyName="@nameof(BrandInputModel.BrandId)" /></th>
+                <th class="middle center"><ynFilterInputText PropertyName="@nameof(BrandInputModel.BrandName)" /></th>
+                <th class="middle center"><ynFilterInputText PropertyName="@nameof(BrandInputModel.Note)" /></th>
+            </tr>
+        </Header>
+        <RowTemplate>
+            <tr>
                 <td class="middle center">
-                    <EditableItemEditButtonComponent Item="@brand" />
+                    <ynEditableSwitch class="yn-button-flat yn-fit-w yn-none-h" />
                 </td>
                 <td class="middle center">
-                    <EditableItemDeleteButtonComponent Item="@brand" />
+                    <ynEditableDelete class="yn-button-flat yn-fit-w yn-none-h" />
                 </td>
-                @* BrandId *@
                 <td class="middle">
-                    <EditableTextLabelColumnComponent Item="@brand" PropertyName="@nameof(brand.BrandId)" />
+                    <ynInputText PropertyName="@nameof(BrandInputModel.BrandId)" />
                 </td>
-                @* BrandName *@
                 <td class="middle">
-                    <EditableTextLabelColumnComponent Item="@brand" PropertyName="@nameof(brand.BrandName)" />
+                    <ynInputText PropertyName="@nameof(BrandInputModel.BrandName)" />
                 </td>
-                @* Note *@
                 <td class="middle">
-                    <EditableTextLabelColumnComponent Item="@brand" PropertyName="@nameof(brand.Note)" />
+                    <ynInputTextArea PropertyName="@nameof(BrandInputModel.Note)" />
                 </td>
-            </EditableGridDataRow>
+            </tr>
         </RowTemplate>
-        <EditTemplate Context="brand">
-            <EditableGridDataRow>
-                @* ItemCommand *@
-                <td class="middle center">
-                    <EditableItemEditButtonComponent Item="@brand" />
-                </td>
-                <td class="middle center">
-                    <EditableItemDeleteButtonComponent Item="@brand" />
-                </td>
-                @* BrandId *@
-                <td class="middle">
-                    <EditableTextControlComponent @bind-Value="brand.BrandId" EditableState="EditStateOptions.Added" />
-                </td>
-                @* BrandName *@
-                <td class="middle">
-                    <EditableTextControlComponent @bind-Value="brand.BrandName" />
-                </td>
-                @* Note *@
-                <td class="middle">
-                    <EditableTextAreaControlComponent @bind-Value="brand.Note" />
-                </td>
-            </EditableGridDataRow>
-        </EditTemplate>
-    </EditableGridComponent>
+    </ynGridView>
 </div>
 
 @*
@@ -138,15 +103,6 @@
     option content
     --------------------------------------------------
 *@
-<LayerManagerComponent @ref="LayerManager" class="optionbar">
-    @* SortOption *@
-    <SortOptionBarComponent TItem="BrandInputModel" Items="@Brands" Name="SortOption" class="optionbar-content">
-        <SortConditionComponent PropertyName="@nameof(BrandInputModel.BrandId)" DisplayName="@($"{WordResource.Brand}{WordResource.Code}")" />
-        <SortConditionComponent PropertyName="@nameof(BrandInputModel.BrandName)" DisplayName="@($"{WordResource.Brand}{WordResource.Name}")" />
-        <SortConditionComponent PropertyName="@nameof(BrandInputModel.Note)" DisplayName="@($"{WordResource.Note}")" />
-    </SortOptionBarComponent>
-    @* Help *@
-    <TemplateLayerComponent Name="HelpOption" class="optionbar-content">
-        マスタメンテナンス画面のサンプル。
-    </TemplateLayerComponent>
-</LayerManagerComponent>
+<ynLayer class="optionbar">
+    <BrandsMaintenanceHelp @ref="HelpPanel" />
+</ynLayer>
